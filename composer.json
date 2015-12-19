@@ -1,0 +1,9 @@
+{
+    "name": "anomaly/image-field_type",
+    "type": "streams-addon",
+    "autoload": {
+        "psr-4": {
+            "Anomaly\\ImageFieldType\\": "src/"
+        }
+    }
+}
