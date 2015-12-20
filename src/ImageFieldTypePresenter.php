@@ -3,6 +3,7 @@
 use Anomaly\FilesModule\File\Contract\FileInterface;
 use Anomaly\Streams\Platform\Addon\FieldType\FieldTypePresenter;
 use Anomaly\Streams\Platform\Image\Image;
+use Anomaly\Streams\Platform\Support\Decorator;
 
 /**
  * Class ImageFieldTypePresenter
@@ -21,6 +22,21 @@ class ImageFieldTypePresenter extends FieldTypePresenter
      * @var ImageFieldType
      */
     protected $object;
+
+    /**
+     * Return the image preview.
+     *
+     * @return null|string
+     */
+    public function preview()
+    {
+        /* @var FileInterface $file */
+        if (!$file = $this->object->getValue()) {
+            return null;
+        }
+
+        return (new Decorator())->decorate($file)->preview();
+    }
 
     /**
      * Return the image data.
@@ -78,5 +94,48 @@ class ImageFieldTypePresenter extends FieldTypePresenter
                 $data->x * $multiplier,
                 $data->y * $multiplier
             );
+    }
+
+    /**
+     * Fallback to getting attributes
+     * off the related value.
+     *
+     * @param string $key
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        try {
+            return parent::__get($key);
+        } catch (\Exception $e) {
+
+            if (!$related = $this->object->getValue()) {
+                return null;
+            }
+
+            return $related->{$key};
+        }
+    }
+
+    /**
+     * Fallback to calling methods
+     * on the related value.
+     *
+     * @param string $method
+     * @param array  $arguments
+     * @return mixed
+     */
+    public function __call($method, $arguments)
+    {
+        try {
+            return parent::__call($method, $arguments);
+        } catch (\Exception $e) {
+
+            if (!$related = $this->object->getValue()) {
+                return null;
+            }
+
+            return call_user_func_array([$related, $method], $arguments);
+        }
     }
 }
