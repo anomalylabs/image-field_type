@@ -39,7 +39,9 @@ class ImageFieldType extends FieldType implements SelfHandling
      * @var array
      */
     protected $config = [
-        'folders' => []
+        'folders'      => [],
+        'min_height'   => 400,
+        'aspect_ratio' => null
     ];
 
     /**
@@ -111,6 +113,16 @@ class ImageFieldType extends FieldType implements SelfHandling
     public function getColumnName()
     {
         return parent::getColumnName() . '_id';
+    }
+
+    /**
+     * Get the aspect ratio.
+     *
+     * @return mixed
+     */
+    public function aspectRatio()
+    {
+        return eval('return ' . strip_tags(str_replace(':', '/', $this->config('aspect_ratio'))) . ';');
     }
 
     /**

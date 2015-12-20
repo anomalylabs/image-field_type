@@ -8,19 +8,17 @@ $('.image-field_type').each(function () {
     var image = wrapper.find('[data-provides="cropper"]');
 
     var options = {
+        viewMode: 0,
+        zoomable: false,
+        autoCropArea: 1,
         data: image.data('data'),
-        modal: image.data('modal'),
-        guides: image.data('guides'),
-        movable: image.data('movable'),
-        scalable: image.data('scalable'),
-        zoomable: image.data('zoomable'),
-        dragMode: image.data('drag-mode'),
-        viewMode: image.data('view-mode'),
-        rotatable: image.data('rotatable'),
-        highlight: image.data('highlight'),
         aspectRatio: image.data('aspect-ratio'),
-        autoCropArea: image.data('auto-crop-area'),
         minContainerHeight: image.data('min-container-height'),
+        build: function () {
+            if (image.attr('src').length) {
+                image.closest('.cropper').removeClass('hidden');
+            }
+        },
         crop: function (e) {
             $('[name="' + field + '[data]"]').val(JSON.stringify(e));
         }

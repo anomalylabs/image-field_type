@@ -37,7 +37,7 @@
 </div>
 
 
-<div class="cropper {{ field_type.value.id ?: 'hidden' }}">
+<div class="cropper hidden">
 
     <input
             type="hidden"
@@ -49,19 +49,8 @@
     <img
             data-provides="cropper"
             data-data="{{ field_type.data|json_encode }}"
-            data-modal="{{ field_type.config('modal', true) }}"
-            data-guides="{{ field_type.config('guides', true) }}"
-            data-center="{{ field_type.config('center', true) }}"
-            data-movable="{{ field_type.config('movable', true) }}"
-            data-view-mode="{{ field_type.config('view_mode', 0) }}"
-            data-scalable="{{ field_type.config('scalable', true) }}"
-            data-zoomable="{{ field_type.config('zoomable', false) }}"
-            data-rotatable="{{ field_type.config('rotatable', true) }}"
-            data-highlight="{{ field_type.config('highlight', true) }}"
-            data-aspect-ratio="{{ field_type.config('aspect_ratio') }}"
-            data-min-container-height="{{ field_type.config('min_container_height', 400) }}"
-            data-auto-crop-area="{{ field_type.config('auto_crop_area', 1) }}"
-            data-drag-mode="{{ field_type.config('drag_mode', 'crop') }}"
+            data-aspect-ratio="{{ field_type.aspectRatio() }}"
+            data-min-container-height="{{ field_type.config.min_height }}"
             {% if field_type.value.id %}
                 src="{{ url('streams/image-field_type/view/' ~ field_type.value.id) }}"
             {% endif %}
