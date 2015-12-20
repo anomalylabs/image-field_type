@@ -52,11 +52,11 @@ class ImageFieldTypeModifier extends FieldTypeModifier
             return $data;
         }
 
-        if (is_array($value) && $data = (object)$value) {
-            return $data;
+        if (is_object($value)) {
+            return $value;
         }
 
-        if (is_object($value)) {
+        if (is_array($value)) {
             return $value;
         }
 

@@ -14,6 +14,18 @@ class ImageFieldTypeAccessor extends FieldTypeAccessor
 {
 
     /**
+     * Desired data.
+     *
+     * @var array
+     */
+    protected $data = [
+        'x',
+        'y',
+        'width',
+        'height'
+    ];
+
+    /**
      * Set the value.
      *
      * @param $value
@@ -29,8 +41,12 @@ class ImageFieldTypeAccessor extends FieldTypeAccessor
             $attributes[$this->fieldType->getColumnName()] = $value;
         }
 
-        if (is_object($value) && $data = json_encode($value)) {
-            $attributes[$this->fieldType->getField() . '_data'] = $data;
+        if (is_object($value) && $data = $this->toData($value)) {
+            $attributes[$this->fieldType->getField() . '_data'] = json_encode($data);
+        }
+
+        if (is_array($value) && $data = $this->toData($value)) {
+            $attributes[$this->fieldType->getField() . '_data'] = json_encode($data);
         }
 
         if (is_null($value)) {
@@ -39,5 +55,27 @@ class ImageFieldTypeAccessor extends FieldTypeAccessor
         }
 
         $entry->setRawAttributes($attributes);
+    }
+
+    /**
+     * Convert the object to data.
+     *
+     * @param $value
+     * @return array
+     */
+    public function toData($value)
+    {
+        return array_map(
+            function ($float) {
+                return (int)$float;
+            },
+            array_filter(
+                (array)$value,
+                function ($key) {
+                    return in_array($key, $this->data);
+                },
+                ARRAY_FILTER_USE_KEY
+            )
+        );
     }
 }
