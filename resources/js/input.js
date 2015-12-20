@@ -41,9 +41,9 @@ $('.image-field_type').each(function () {
         wrapper.find('.selected').load(APPLICATION_URL + '/streams/image-field_type/selected?uploaded=' + $(this).data('file'), function () {
 
             modal.modal('hide');
-
-            image.next('.cropper-container').removeClass('hidden');
         });
+
+        image.closest('.cropper').removeClass('hidden');
 
         image
             .cropper('replace', APPLICATION_URL + '/streams/image-field_type/view/' + $(this).data('file'))
@@ -63,7 +63,7 @@ $('.image-field_type').each(function () {
 
             modal.modal('hide');
 
-            image.next('.cropper-container').addClass('hidden');
+            image.closest('.cropper').addClass('hidden');
         });
     });
 });
