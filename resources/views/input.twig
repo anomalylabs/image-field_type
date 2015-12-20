@@ -2,26 +2,69 @@
 {{ asset_add("scripts.js", "anomaly.field_type.image::js/cropper.js") }}
 {{ asset_add("scripts.js", "anomaly.field_type.image::js/input.js") }}
 
-<div>
 
-    {% if field_type.value %}
-        <img
-                data-provides="cropper"
-                data-modal="{{ field_type.config('modal', true) }}"
-                data-guides="{{ field_type.config('guides', true) }}"
-                data-center="{{ field_type.config('center', true) }}"
-                data-movable="{{ field_type.config('movable', true) }}"
-                data-view-mode="{{ field_type.config('view_mode', 3) }}"
-                data-scalable="{{ field_type.config('scalable', true) }}"
-                data-zoomable="{{ field_type.config('zoomable', false) }}"
-                data-rotatable="{{ field_type.config('rotatable', true) }}"
-                data-highlight="{{ field_type.config('highlight', true) }}"
-                data-aspect-ratio="{{ field_type.config('aspect_ratio') }}"
-                data-min-container-width="{{ field_type.config('min_container_width', 500) }}"
-                data-min-container-height="{{ field_type.config('min_container_height', 500) }}"
-                data-auto-crop-area="{{ field_type.config('auto_crop_area', 1) }}"
-                data-drag-mode="{{ field_type.config('drag_mode', 'crop') }}"
-                src="{{ image_url('alc.theme.alc::img/dev/slide.jpg') }}"/>
-    {% endif %}
+{{ asset_add('scripts.js', 'anomaly.field_type.image::js/input.js') }}
+
+<a
+        data-toggle="modal"
+        data-target="#{{ field_type.field_name }}-modal"
+        class="btn btn-default btn-xs"
+        href="{{ url('streams/image-field_type/index/' ~ field_type.config_key) }}"
+>{{ trans('anomaly.field_type.image::button.select_file') }}</a>
+
+<a
+        data-toggle="modal"
+        data-target="#{{ field_type.field_name }}-modal"
+        href="{{ url('streams/image-field_type/choose/' ~ field_type.config_key) }}"
+        class="btn btn-success btn-xs"
+>{{ trans('anomaly.field_type.image::button.upload') }}</a>
+
+<input
+        type="hidden"
+        name="{{ field_type.input_name }}[id]"
+        value="{{ field_type.value.id ?: field_type.value }}"
+        {{ field_type.disabled ? 'disabled' }}
+        {{ field_type.readonly ? 'readonly' }}>
+
+<div class="selected">
+    {{ field_type.value_table|raw }}
+</div>
+
+<div class="modal remote" id="{{ field_type.field_name }}-modal">
+    <div class="modal-dialog">
+        <div class="modal-content"></div>
+    </div>
+</div>
+
+
+<div class="cropper">
+
+    <input
+            type="hidden"
+            name="{{ field_type.input_name }}[data]"
+            value="{{ field_type.data|json_encode }}"
+            {{ field_type.disabled ? 'disabled' }}
+            {{ field_type.readonly ? 'readonly' }}>
+
+    <img
+            data-provides="cropper"
+            data-data="{{ field_type.data|json_encode }}"
+            data-modal="{{ field_type.config('modal', true) }}"
+            data-guides="{{ field_type.config('guides', true) }}"
+            data-center="{{ field_type.config('center', true) }}"
+            data-movable="{{ field_type.config('movable', true) }}"
+            data-view-mode="{{ field_type.config('view_mode', 0) }}"
+            data-scalable="{{ field_type.config('scalable', true) }}"
+            data-zoomable="{{ field_type.config('zoomable', false) }}"
+            data-rotatable="{{ field_type.config('rotatable', true) }}"
+            data-highlight="{{ field_type.config('highlight', true) }}"
+            data-aspect-ratio="{{ field_type.config('aspect_ratio') }}"
+            data-min-container-height="{{ field_type.config('min_container_height', 400) }}"
+            data-auto-crop-area="{{ field_type.config('auto_crop_area', 1) }}"
+            data-drag-mode="{{ field_type.config('drag_mode', 'crop') }}"
+            {% if field_type.value.id %}
+                src="{{ url('streams/image-field_type/view/' ~ field_type.value.id) }}"
+            {% endif %}
+    >
 
 </div>

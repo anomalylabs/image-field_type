@@ -1,41 +1,69 @@
-$(function () {
+// Initialize file pickers
+$('.image-field_type').each(function () {
 
-    // Initialize Croppers
-    $('[data-provides="cropper"]').each(function () {
+    var data = null;
+    var wrapper = $(this);
+    var field = wrapper.data('field');
+    var modal = $('#' + field + '-modal');
+    var image = wrapper.find('[data-provides="cropper"]');
 
-        var image = $(this);
-        var wrapper = image.closest('div');
+    var options = {
+        data: image.data('data'),
+        modal: image.data('modal'),
+        guides: image.data('guides'),
+        movable: image.data('movable'),
+        scalable: image.data('scalable'),
+        zoomable: image.data('zoomable'),
+        dragMode: image.data('drag-mode'),
+        viewMode: image.data('view-mode'),
+        rotatable: image.data('rotatable'),
+        highlight: image.data('highlight'),
+        aspectRatio: image.data('aspect-ratio'),
+        autoCropArea: image.data('auto-crop-area'),
+        minContainerHeight: image.data('min-container-height'),
+        crop: function (e) {
+            $('[name="' + field + '[data]"]').val(JSON.stringify(e));
+        }
+    };
 
-        image.cropper({
-            modal: $(this).data('modal'),
-            guides: $(this).data('guides'),
-            movable: $(this).data('movable'),
-            scalable: $(this).data('scalable'),
-            zoomable: $(this).data('zoomable'),
-            dragMode: $(this).data('drag-mode'),
-            viewMode: $(this).data('view-mode'),
-            rotatable: $(this).data('rotatable'),
-            highlight: $(this).data('highlight'),
-            aspectRatio: $(this).data('aspect-ratio'),
-            autoCropArea: $(this).data('auto-crop-area'),
-            minContainerWidth: $(this).data('min-container-width'),
-            minContainerHeight: $(this).data('min-container-height'),
-            crop: function (e) {
-                console.log(e.x);
-                console.log(e.y);
-                console.log(e.width);
-                console.log(e.height);
-                console.log(e.rotate);
-                console.log(e.scaleX);
-                console.log(e.scaleY);
-            }
+    if (image.closest('.tab-content').length) {
+        options.minContainerWidth = image.closest('.tab-content').width();
+    }
+
+    image.cropper(options);
+
+    modal.on('click', '[data-file]', function (e) {
+
+        e.preventDefault();
+
+        modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
+
+        wrapper.find('.selected').load(APPLICATION_URL + '/streams/image-field_type/selected?uploaded=' + $(this).data('file'), function () {
+
+            modal.modal('hide');
+
+            image.next('.cropper-container').removeClass('hidden');
         });
 
-        wrapper.find('.data').click(function () {
+        image
+            .cropper('replace', APPLICATION_URL + '/streams/image-field_type/view/' + $(this).data('file'))
+            .cropper('reset');
 
-            var data = image.cropper('getData', true);
+        $('[name="' + field + '[id]"]').val($(this).data('file'));
+    });
 
-            console.log(data.height);
+    $(wrapper).on('click', '[data-dismiss="file"]', function (e) {
+
+        e.preventDefault();
+
+        $('[name="' + field + '[id]"]').val('');
+        $('[name="' + field + '[data]"]').val('');
+
+        wrapper.find('.selected').load(APPLICATION_URL + '/streams/image-field_type/selected', function () {
+
+            modal.modal('hide');
+
+            image.next('.cropper-container').addClass('hidden');
         });
     });
 });
