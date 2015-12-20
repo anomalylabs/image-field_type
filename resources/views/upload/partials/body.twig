@@ -8,7 +8,8 @@
          data-loading="{{ trans('anomaly.field_type.image::message.loading') }}"
          data-uploading="{{ trans('anomaly.field_type.image::message.uploading') }}"
          data-max-parallel="{{ setting_value('anomaly.module.files::max_parallel_uploads', 3) }}"
-         data-allowed="{{ folder.allowed_types.value ? '.' ~ folder.allowed_types.value|join(',.') }}"></div>
+            {#data-allowed="{{ folder.allowed_types.value ? '.' ~ folder.allowed_types.value|join(',.') }}"#}
+         data-allowed="{{ config_get('anomaly.module.files::mimes.types.image')|join(',.') }}"></div>
 
     <div class="uploads"></div>
 

@@ -2,6 +2,7 @@
 
 use Anomaly\FilesModule\File\FileModel;
 use Anomaly\Streams\Platform\Ui\Table\TableBuilder;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -59,13 +60,16 @@ class FileTableBuilder extends TableBuilder
     /**
      * Fired when query starts building.
      *
-     * @param Builder $query
+     * @param Builder    $query
+     * @param Repository $config
      */
-    public function onQuerying(Builder $query)
+    public function onQuerying(Builder $query, Repository $config)
     {
         if ($folders = $this->getFolders()) {
             $query->whereIn('folder_id', array_keys($folders));
         }
+
+        $query->whereIn('extension', $config->get('anomaly.module.files::mimes.types.image'));
     }
 
     /**

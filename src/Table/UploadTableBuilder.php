@@ -2,6 +2,7 @@
 
 use Anomaly\FilesModule\File\FileModel;
 use Anomaly\Streams\Platform\Ui\Table\TableBuilder;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -70,9 +71,10 @@ class UploadTableBuilder extends TableBuilder
      * Fired just before querying
      * for table entries.
      *
-     * @param Builder $query
+     * @param Builder    $query
+     * @param Repository $config
      */
-    public function onQuerying(Builder $query)
+    public function onQuerying(Builder $query, Repository $config)
     {
         $uploaded = $this->getUploaded();
 
@@ -80,6 +82,8 @@ class UploadTableBuilder extends TableBuilder
 
         $query->orderBy('updated_at', 'ASC');
         $query->orderBy('created_at', 'ASC');
+
+        $query->whereIn('extension', $config->get('anomaly.module.files::mimes.types.image'));
     }
 
     /**
