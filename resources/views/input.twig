@@ -1,0 +1,27 @@
+{{ asset_add("styles.css", "anomaly.field_type.image::less/cropper.less") }}
+{{ asset_add("scripts.js", "anomaly.field_type.image::js/cropper.js") }}
+{{ asset_add("scripts.js", "anomaly.field_type.image::js/input.js") }}
+
+<div>
+
+    {% if field_type.value %}
+        <img
+                data-provides="cropper"
+                data-modal="{{ field_type.config('modal', true) }}"
+                data-guides="{{ field_type.config('guides', true) }}"
+                data-center="{{ field_type.config('center', true) }}"
+                data-movable="{{ field_type.config('movable', true) }}"
+                data-view-mode="{{ field_type.config('view_mode', 3) }}"
+                data-scalable="{{ field_type.config('scalable', true) }}"
+                data-zoomable="{{ field_type.config('zoomable', false) }}"
+                data-rotatable="{{ field_type.config('rotatable', true) }}"
+                data-highlight="{{ field_type.config('highlight', true) }}"
+                data-aspect-ratio="{{ field_type.config('aspect_ratio') }}"
+                data-min-container-width="{{ field_type.config('min_container_width', 500) }}"
+                data-min-container-height="{{ field_type.config('min_container_height', 500) }}"
+                data-auto-crop-area="{{ field_type.config('auto_crop_area', 1) }}"
+                data-drag-mode="{{ field_type.config('drag_mode', 'crop') }}"
+                src="{{ image_url('alc.theme.alc::img/dev/slide.jpg') }}"/>
+    {% endif %}
+
+</div>

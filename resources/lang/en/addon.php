@@ -3,5 +3,5 @@
 return [
     'title'       => 'Image',
     'name'        => 'Image Field Type',
-    'description' => ''
+    'description' => 'An image selection and cropper field type.'
 ];
