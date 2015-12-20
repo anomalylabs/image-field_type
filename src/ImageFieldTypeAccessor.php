@@ -14,11 +14,11 @@ class ImageFieldTypeAccessor extends FieldTypeAccessor
 {
 
     /**
-     * Desired data.
+     * Desired data properties.
      *
      * @var array
      */
-    protected $data = [
+    protected $properties = [
         'x',
         'y',
         'width',
@@ -72,7 +72,7 @@ class ImageFieldTypeAccessor extends FieldTypeAccessor
             array_filter(
                 (array)$value,
                 function ($key) {
-                    return in_array($key, $this->data);
+                    return in_array($key, $this->properties);
                 },
                 ARRAY_FILTER_USE_KEY
             )
