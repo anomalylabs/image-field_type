@@ -65,17 +65,12 @@ class ImageFieldTypeAccessor extends FieldTypeAccessor
      */
     public function toData($value)
     {
-        return array_map(
-            function ($float) {
-                return (int)$float;
-            },
-            array_filter(
-                (array)$value,
-                function ($key) {
-                    return in_array($key, $this->properties);
-                },
-                ARRAY_FILTER_USE_KEY
-            )
-        );
+        $data = [];
+
+        foreach ($this->properties as $property) {
+            $data[$property] = (int)$value->{$property};
+        }
+
+        return $data;
     }
 }
