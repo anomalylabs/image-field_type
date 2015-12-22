@@ -1,12 +1,14 @@
 <?php namespace Anomaly\ImageFieldType;
 
 use Anomaly\FilesModule\File\Contract\FileInterface;
+use Anomaly\ImageFieldType\Image\ImageModel;
 use Anomaly\ImageFieldType\Table\ValueTableBuilder;
 use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Robbo\Presenter\Decorator;
 
 /**
  * Class ImageFieldType
@@ -71,7 +73,7 @@ class ImageFieldType extends FieldType implements SelfHandling
         $entry = $this->getEntry();
 
         return $entry->belongsTo(
-            array_get($this->config, 'related', 'Anomaly\FilesModule\File\FileModel'),
+            array_get($this->config, 'related', 'Anomaly\ImageFieldType\Image\ImageModel'),
             $this->getColumnName()
         );
     }
@@ -155,6 +157,21 @@ class ImageFieldType extends FieldType implements SelfHandling
         }
 
         return $table->setUploaded([$file])->build()->response()->getTableContent();
+    }
+
+    /**
+     * Append the crop data to the model.
+     *
+     * @param Decorator $decorator
+     * @param           $value
+     * @return \Anomaly\Streams\Platform\Support\Presenter
+     */
+    public function decorate(Decorator $decorator, $value)
+    {
+        /* @var ImageModel $value */
+        $value->setData(json_decode($this->entry->{$this->getField() . '_data'}));
+
+        return parent::decorate($decorator, $value);
     }
 
     /**
