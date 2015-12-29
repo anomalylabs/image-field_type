@@ -48,6 +48,10 @@ class DropDataColumn
 
         $table = $assignment->getStreamPrefix() . $assignment->getStreamSlug();
 
+        if (!$this->schema->hasTable($table)) {
+            return;
+        }
+
         $this->schema->table(
             $table,
             function (Blueprint $table) use ($assignment) {
