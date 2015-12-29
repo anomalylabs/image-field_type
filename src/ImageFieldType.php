@@ -164,10 +164,14 @@ class ImageFieldType extends FieldType implements SelfHandling
      *
      * @param Decorator $decorator
      * @param           $value
-     * @return \Anomaly\Streams\Platform\Support\Presenter
+     * @return \Anomaly\Streams\Platform\Support\Presenter|null
      */
     public function decorate(Decorator $decorator, $value)
     {
+        if (!$value) {
+            return null;
+        }
+
         /* @var ImageModel $value */
         $value->setData(json_decode($this->entry->{$this->getField() . '_data'}));
 
