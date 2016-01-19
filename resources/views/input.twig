@@ -15,7 +15,11 @@
 <a
         data-toggle="modal"
         data-target="#{{ field_type.field_name }}-modal"
-        href="{{ url('streams/image-field_type/choose/' ~ field_type.config_key) }}"
+        {% if field_type.config.folders|length == 1 %}
+            href="{{ url('streams/image-field_type/upload/' ~ field_type.config.folders|first) }}"
+        {% else %}
+            href="{{ url('streams/image-field_type/choose/' ~ field_type.config_key) }}"
+        {% endif %}
         class="btn btn-success btn-xs"
 >{{ trans('anomaly.field_type.image::button.upload') }}</a>
 
@@ -31,7 +35,7 @@
 </div>
 
 <div class="modal remote" id="{{ field_type.field_name }}-modal">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content"></div>
     </div>
 </div>
