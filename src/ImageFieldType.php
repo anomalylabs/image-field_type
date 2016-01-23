@@ -8,6 +8,7 @@ use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 use Robbo\Presenter\Decorator;
 
 /**
@@ -157,6 +158,20 @@ class ImageFieldType extends FieldType implements SelfHandling
         }
 
         return $table->setUploaded([$file])->build()->response()->getTableContent();
+    }
+
+    /**
+     * Return the crop data.
+     *
+     * @return null|stdClass
+     */
+    public function data()
+    {
+        if (!$this->entry) {
+            return null;
+        }
+
+        return json_decode($this->entry->{$this->getField() . '_data'});
     }
 
     /**
