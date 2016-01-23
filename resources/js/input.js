@@ -6,7 +6,7 @@ $('.image-field_type').each(function () {
     var field = wrapper.data('field');
     var modal = $('#' + field + '-modal');
     var image = wrapper.find('[data-provides="cropper"]');
-console.log(image.data('data'));
+
     var options = {
         viewMode: 0,
         zoomable: false,

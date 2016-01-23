@@ -9,7 +9,6 @@ use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
-use Robbo\Presenter\Decorator;
 
 /**
  * Class ImageFieldType
@@ -177,11 +176,10 @@ class ImageFieldType extends FieldType implements SelfHandling
     /**
      * Append the crop data to the model.
      *
-     * @param Decorator $decorator
-     * @param           $value
+     * @param $value
      * @return \Anomaly\Streams\Platform\Support\Presenter|null
      */
-    public function decorate(Decorator $decorator, $value)
+    public function decorate($value)
     {
         if (!$value) {
             return null;
@@ -190,7 +188,7 @@ class ImageFieldType extends FieldType implements SelfHandling
         /* @var ImageModel $value */
         $value->setData(json_decode($this->entry->{$this->getField() . '_data'}));
 
-        return parent::decorate($decorator, $value);
+        return parent::decorate($value);
     }
 
     /**
