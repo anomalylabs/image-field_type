@@ -1,6 +1,7 @@
 <?php namespace Anomaly\ImageFieldType\Image;
 
 use Anomaly\FilesModule\File\FileModel;
+use Anomaly\ImageFieldType\Image\Contract\ImageInterface;
 
 /**
  * Class ImageModel
@@ -10,7 +11,7 @@ use Anomaly\FilesModule\File\FileModel;
  * @author        Ryan Thompson <ryan@anomaly.is>
  * @package       Anomaly\ImageFieldType\Image
  */
-class ImageModel extends FileModel
+class ImageModel extends FileModel implements ImageInterface
 {
 
     /**

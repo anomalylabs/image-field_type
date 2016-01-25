@@ -1,6 +1,7 @@
 <?php namespace Anomaly\ImageFieldType;
 
 use Anomaly\FilesModule\File\Contract\FileInterface;
+use Anomaly\ImageFieldType\Image\Contract\ImageInterface;
 use Anomaly\ImageFieldType\Image\ImageModel;
 use Anomaly\ImageFieldType\Table\ValueTableBuilder;
 use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
@@ -181,7 +182,7 @@ class ImageFieldType extends FieldType implements SelfHandling
      */
     public function decorate($value)
     {
-        if (!$value) {
+        if (!$value instanceof ImageInterface) {
             return null;
         }
 
