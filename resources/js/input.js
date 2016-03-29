@@ -1,10 +1,10 @@
 // Initialize file pickers
-$('.image-field_type').each(function () {
+$('[data-provides="anomaly.field_type.image"]').each(function () {
 
-    var data = null;
-    var wrapper = $(this);
-    var field = wrapper.data('field');
+    var input = $(this);
+    var field = input.data('field_name');
     var modal = $('#' + field + '-modal');
+    var wrapper = input.closest('.form-group');
     var image = wrapper.find('[data-provides="cropper"]');
 
     var options = {
@@ -36,7 +36,7 @@ $('.image-field_type').each(function () {
 
         modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
 
-        wrapper.find('.selected').load(APPLICATION_URL + '/streams/image-field_type/selected?uploaded=' + $(this).data('file'), function () {
+        wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $(this).data('file'), function () {
 
             modal.modal('hide');
         });
@@ -44,7 +44,7 @@ $('.image-field_type').each(function () {
         image.closest('.cropper').removeClass('hidden');
 
         image
-            .cropper('replace', APPLICATION_URL + '/streams/image-field_type/view/' + $(this).data('file'))
+            .cropper('replace', '/streams/image-field_type/view/' + $(this).data('file'))
             .cropper('reset');
 
         $('[name="' + field + '[id]"]').val($(this).data('file'));
@@ -57,7 +57,7 @@ $('.image-field_type').each(function () {
         $('[name="' + field + '[id]"]').val('');
         $('[name="' + field + '[data]"]').val('');
 
-        wrapper.find('.selected').load(APPLICATION_URL + '/streams/image-field_type/selected', function () {
+        wrapper.find('.selected').load('/streams/image-field_type/selected', function () {
 
             modal.modal('hide');
 
