@@ -33,6 +33,10 @@ class ImagePresenter extends FilePresenter
         $data  = $this->object->getData();
         $image = $this->object->image();
 
+        if (!$data) {
+            return $image;
+        }
+
         return $image->crop($data->width, $data->height, $data->x, $data->y);
     }
 }

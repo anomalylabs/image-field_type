@@ -23,8 +23,8 @@ interface ImageInterface extends FileInterface
     /**
      * Set the data.
      *
-     * @param \stdClass $data
+     * @param \stdClass|null $data
      * @return $this
      */
-    public function setData(\stdClass $data);
+    public function setData($data);
 }

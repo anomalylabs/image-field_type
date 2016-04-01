@@ -17,14 +17,14 @@ class ImageModel extends FileModel implements ImageInterface
     /**
      * The crop data.
      *
-     * @var \stdClass
+     * @var \stdClass|null
      */
-    protected $data = [];
+    protected $data = null;
 
     /**
      * Get the data.
      *
-     * @return \stdClass
+     * @return \stdClass|null
      */
     public function getData()
     {
@@ -34,10 +34,10 @@ class ImageModel extends FileModel implements ImageInterface
     /**
      * Set the data.
      *
-     * @param \stdClass $data
+     * @param \stdClass|null $data
      * @return $this
      */
-    public function setData(\stdClass $data)
+    public function setData($data)
     {
         $this->data = $data;
 
