@@ -2,7 +2,7 @@
 
 use Anomaly\FilesModule\File\FilePresenter;
 use Anomaly\ImageFieldType\Image\Contract\ImageInterface;
-use Intervention\Image\Image;
+use Anomaly\Streams\Platform\Image\Image;
 
 /**
  * Class ImagePresenter
