@@ -157,7 +157,7 @@ class ImageFieldType extends FieldType implements SelfHandling
             $file = $file->getId();
         }
 
-        return $table->setUploaded([$file])->build()->response()->getTableContent();
+        return $table->setUploaded([$file])->build()->load()->getTableContent();
     }
 
     /**
