@@ -2,14 +2,6 @@
 
 use Anomaly\Streams\Platform\Addon\FieldType\FieldTypeAccessor;
 
-/**
- * Class ImageFieldTypeAccessor
- *
- * @link          http://anomaly.is/streams-platform
- * @author        AnomalyLabs, Inc. <hello@anomaly.is>
- * @author        Ryan Thompson <ryan@anomaly.is>
- * @package       Anomaly\ImageFieldType
- */
 class ImageFieldTypeAccessor extends FieldTypeAccessor
 {
 
@@ -22,7 +14,7 @@ class ImageFieldTypeAccessor extends FieldTypeAccessor
         'x',
         'y',
         'width',
-        'height'
+        'height',
     ];
 
     /**

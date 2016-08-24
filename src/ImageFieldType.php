@@ -11,14 +11,6 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use stdClass;
 
-/**
- * Class ImageFieldType
- *
- * @link          http://anomaly.is/streams-platform
- * @author        AnomalyLabs, Inc. <hello@anomaly.is>
- * @author        Ryan Thompson <ryan@anomaly.is>
- * @package       Anomaly\ImageFieldType
- */
 class ImageFieldType extends FieldType implements SelfHandling
 {
 
@@ -44,7 +36,7 @@ class ImageFieldType extends FieldType implements SelfHandling
     protected $config = [
         'folders'      => [],
         'min_height'   => 400,
-        'aspect_ratio' => null
+        'aspect_ratio' => null,
     ];
 
     /**
