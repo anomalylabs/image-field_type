@@ -1,7 +1,6 @@
 <?php namespace Anomaly\ImageFieldType\Command;
 
 use Anomaly\ImageFieldType\ImageFieldType;
-use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Http\Request;
 
 /**
@@ -10,9 +9,8 @@ use Illuminate\Http\Request;
  * @link          http://anomaly.is/streams-platform
  * @author        AnomalyLabs, Inc. <hello@anomaly.is>
  * @author        Ryan Thompson <ryan@anomaly.is>
- * @package       Anomaly\ImageFieldType\Command
  */
-class GetUploadFile implements SelfHandling
+class GetUploadFile
 {
 
     /**
@@ -35,7 +33,7 @@ class GetUploadFile implements SelfHandling
     /**
      * Handle the command.
      *
-     * @param Request $request
+     * @param  Request                                                   $request
      * @return array|\Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public function handle(Request $request)

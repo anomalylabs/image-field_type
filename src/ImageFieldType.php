@@ -6,12 +6,12 @@ use Anomaly\ImageFieldType\Image\ImageModel;
 use Anomaly\ImageFieldType\Table\ValueTableBuilder;
 use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
-use Illuminate\Contracts\Bus\SelfHandling;
+
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use stdClass;
 
-class ImageFieldType extends FieldType implements SelfHandling
+class ImageFieldType extends FieldType
 {
 
     /**

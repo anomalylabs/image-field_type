@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
  * @link          http://anomaly.is/streams-platform
  * @author        AnomalyLabs, Inc. <hello@anomaly.is>
  * @author        Ryan Thompson <ryan@anomaly.is>
- * @package       Anomaly\ImageFieldType\Table
  */
 class ValueTableBuilder extends TableBuilder
 {
@@ -36,7 +35,7 @@ class ValueTableBuilder extends TableBuilder
      */
     protected $columns = [
         'entry.preview' => [
-            'heading' => 'anomaly.module.files::field.preview.name'
+            'heading' => 'anomaly.module.files::field.preview.name',
         ],
         'name'          => [
             'sort_column' => 'name',
@@ -49,17 +48,17 @@ class ValueTableBuilder extends TableBuilder
             'value'       => [
                 'file'     => 'entry.name',
                 'folder'   => 'entry.folder.slug',
-                'keywords' => 'entry.keywords.labels',
+                'keywords' => 'entry.keywords.labels|join',
                 'disk'     => 'entry.folder.disk.slug',
-                'size'     => 'entry.size_label'
-            ]
+                'size'     => 'entry.size_label',
+            ],
         ],
         'size'          => [
             'sort_column' => 'size',
-            'value'       => 'entry.readable_size'
+            'value'       => 'entry.readable_size',
         ],
         'mime_type',
-        'folder'
+        'folder',
     ];
 
     /**
@@ -69,8 +68,8 @@ class ValueTableBuilder extends TableBuilder
      */
     protected $buttons = [
         'remove' => [
-            'data-dismiss' => 'file'
-        ]
+            'data-dismiss' => 'file',
+        ],
     ];
 
     /**
@@ -83,7 +82,7 @@ class ValueTableBuilder extends TableBuilder
         'show_headers'       => false,
         'sortable_headers'   => false,
         'table_view'         => 'anomaly.field_type.image::table',
-        'no_results_message' => 'anomaly.field_type.image::message.no_file_selected'
+        'no_results_message' => 'anomaly.field_type.image::message.no_file_selected',
     ];
 
     /**
@@ -93,8 +92,8 @@ class ValueTableBuilder extends TableBuilder
      */
     protected $assets = [
         'styles.css' => [
-            'anomaly.field_type.image::less/input.less'
-        ]
+            'anomaly.field_type.image::less/input.less',
+        ],
     ];
 
     /**
@@ -126,7 +125,7 @@ class ValueTableBuilder extends TableBuilder
     /**
      * Set the uploaded IDs.
      *
-     * @param array $uploaded
+     * @param  array $uploaded
      * @return $this
      */
     public function setUploaded(array $uploaded)

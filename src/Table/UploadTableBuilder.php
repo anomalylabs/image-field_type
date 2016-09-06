@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Builder;
  * @link          http://anomaly.is/streams-platform
  * @author        AnomalyLabs, Inc. <hello@anomaly.is>
  * @author        Ryan Thompson <ryan@anomaly.is>
- * @package       Anomaly\ImageFieldType\Table
  */
 class UploadTableBuilder extends TableBuilder
 {
@@ -51,7 +50,7 @@ class UploadTableBuilder extends TableBuilder
      */
     protected $columns = [
         'entry.preview' => [
-            'heading' => 'anomaly.module.files::field.preview.name'
+            'heading' => 'anomaly.module.files::field.preview.name',
         ],
         'name'          => [
             'sort_column' => 'name',
@@ -64,17 +63,17 @@ class UploadTableBuilder extends TableBuilder
             'value'       => [
                 'file'     => 'entry.name',
                 'folder'   => 'entry.folder.slug',
-                'keywords' => 'entry.keywords.labels',
+                'keywords' => 'entry.keywords.labels|join',
                 'disk'     => 'entry.folder.disk.slug',
-                'size'     => 'entry.size_label'
-            ]
+                'size'     => 'entry.size_label',
+            ],
         ],
         'size'          => [
             'sort_column' => 'size',
-            'value'       => 'entry.readable_size'
+            'value'       => 'entry.readable_size',
         ],
         'mime_type',
-        'folder'
+        'folder',
     ];
 
     /**
@@ -84,8 +83,8 @@ class UploadTableBuilder extends TableBuilder
      */
     protected $buttons = [
         'select' => [
-            'data-file' => 'entry.id'
-        ]
+            'data-file' => 'entry.id',
+        ],
     ];
 
     /**
@@ -98,7 +97,7 @@ class UploadTableBuilder extends TableBuilder
         'container_class'    => '',
         'enable_views'       => false,
         'sortable_headers'   => false,
-        'no_results_message' => 'anomaly.field_type.image::message.no_uploads'
+        'no_results_message' => 'anomaly.field_type.image::message.no_uploads',
     ];
 
     /**
@@ -133,7 +132,7 @@ class UploadTableBuilder extends TableBuilder
     /**
      * Set the uploaded IDs.
      *
-     * @param array $uploaded
+     * @param  array $uploaded
      * @return $this
      */
     public function setUploaded(array $uploaded)
