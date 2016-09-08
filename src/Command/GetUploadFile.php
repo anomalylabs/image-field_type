@@ -1,7 +1,7 @@
 <?php namespace Anomaly\ImageFieldType\Command;
 
 use Anomaly\ImageFieldType\ImageFieldType;
-use Illuminate\Contracts\Bus\SelfHandling;
+
 use Illuminate\Http\Request;
 
 /**
@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
  * @author        Ryan Thompson <ryan@anomaly.is>
  * @package       Anomaly\ImageFieldType\Command
  */
-class GetUploadFile implements SelfHandling
+class GetUploadFile
 {
 
     /**

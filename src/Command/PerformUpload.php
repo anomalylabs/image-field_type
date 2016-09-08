@@ -5,7 +5,7 @@ use Anomaly\ImageFieldType\ImageFieldTypeParser;
 use Anomaly\FilesModule\Disk\Contract\DiskRepositoryInterface;
 use Anomaly\FilesModule\File\Contract\FileInterface;
 use Anomaly\FilesModule\File\Contract\FileRepositoryInterface;
-use Illuminate\Contracts\Bus\SelfHandling;
+
 use Illuminate\Http\Request;
 use League\Flysystem\MountManager;
 
@@ -17,7 +17,7 @@ use League\Flysystem\MountManager;
  * @author        Ryan Thompson <ryan@anomaly.is>
  * @package       Anomaly\ImageFieldType\Command
  */
-class PerformUpload implements SelfHandling
+class PerformUpload
 {
 
     /**
