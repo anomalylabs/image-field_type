@@ -1,7 +1,6 @@
 <?php namespace Anomaly\ImageFieldType\Command;
 
 use Anomaly\ImageFieldType\ImageFieldType;
-
 use Illuminate\Http\Request;
 
 /**

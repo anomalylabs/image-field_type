@@ -58,15 +58,15 @@ class FileTableFilters
                         'exact'   => true,
                         'filter'  => 'select',
                         'options' => $allowed,
-                        'enabled' => (count($allowed) !== 1)
+                        'enabled' => (count($allowed) !== 1),
                     ],
                     'search' => [
                         'columns' => [
                             'name',
                             'keywords',
-                            'mime_type'
-                        ]
-                    ]
+                            'mime_type',
+                        ],
+                    ],
                 ]
             );
     }

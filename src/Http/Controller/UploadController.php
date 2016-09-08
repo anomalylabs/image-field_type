@@ -34,7 +34,7 @@ class UploadController extends AdminController
             'anomaly.field_type.image::upload/index',
             [
                 'folder' => $this->dispatch(new GetFolder($folder)),
-                'table'  => $table->make()->getTable()
+                'table'  => $table->make()->getTable(),
             ]
         );
     }

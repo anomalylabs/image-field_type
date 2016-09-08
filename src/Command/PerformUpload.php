@@ -1,11 +1,10 @@
 <?php namespace Anomaly\ImageFieldType\Command;
 
-use Anomaly\ImageFieldType\ImageFieldType;
-use Anomaly\ImageFieldType\ImageFieldTypeParser;
 use Anomaly\FilesModule\Disk\Contract\DiskRepositoryInterface;
 use Anomaly\FilesModule\File\Contract\FileInterface;
 use Anomaly\FilesModule\File\Contract\FileRepositoryInterface;
-
+use Anomaly\ImageFieldType\ImageFieldType;
+use Anomaly\ImageFieldType\ImageFieldTypeParser;
 use Illuminate\Http\Request;
 use League\Flysystem\MountManager;
 
@@ -42,7 +41,7 @@ class PerformUpload
      *
      * @param DiskRepositoryInterface $disks
      * @param FileRepositoryInterface $files
-     * @param ImageFieldTypeParser     $parser
+     * @param ImageFieldTypeParser    $parser
      * @param Request                 $request
      * @param MountManager            $manager
      *

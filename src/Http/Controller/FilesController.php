@@ -62,7 +62,7 @@ class FilesController extends AdminController
         return $this->view->make(
             'anomaly.field_type.image::choose',
             [
-                'folders' => $allowed
+                'folders' => $allowed,
             ]
         );
     }

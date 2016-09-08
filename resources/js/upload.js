@@ -22,10 +22,10 @@ $(function () {
             sending: function (file, xhr, formData) {
                 formData.append('folder', element.data('folder'));
             },
-            accept: function(file, done) {
-                $.getJSON('/admin/files/exists/' + element.data('folder') + '/' + file.name, function(data) {
-                    if(data.exists) {
-                        if(!confirm(file.name + " " + element.data('overwrite'))) {
+            accept: function (file, done) {
+                $.getJSON('/admin/files/exists/' + element.data('folder') + '/' + file.name, function (data) {
+                    if (data.exists) {
+                        if (!confirm(file.name + " " + element.data('overwrite'))) {
                             dropzone.removeFile(file);
                             return;
                         }

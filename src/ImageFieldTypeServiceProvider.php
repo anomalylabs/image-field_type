@@ -20,11 +20,11 @@ class ImageFieldTypeServiceProvider extends AddonServiceProvider
      */
     protected $listeners = [
         'Anomaly\Streams\Platform\Assignment\Event\AssignmentWasCreated' => [
-            'Anomaly\ImageFieldType\Listener\AddDataColumn'
+            'Anomaly\ImageFieldType\Listener\AddDataColumn',
         ],
         'Anomaly\Streams\Platform\Assignment\Event\AssignmentWasDeleted' => [
-            'Anomaly\ImageFieldType\Listener\DropDataColumn'
-        ]
+            'Anomaly\ImageFieldType\Listener\DropDataColumn',
+        ],
     ];
 
     /**
@@ -33,7 +33,7 @@ class ImageFieldTypeServiceProvider extends AddonServiceProvider
      * @var array
      */
     protected $singletons = [
-        'Anomaly\ImageFieldType\ImageFieldTypeModifier' => 'Anomaly\ImageFieldType\ImageFieldTypeModifier'
+        'Anomaly\ImageFieldType\ImageFieldTypeModifier' => 'Anomaly\ImageFieldType\ImageFieldTypeModifier',
     ];
 
     /**
