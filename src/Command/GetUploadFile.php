@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
  * @link          http://anomaly.is/streams-platform
  * @author        AnomalyLabs, Inc. <hello@anomaly.is>
  * @author        Ryan Thompson <ryan@anomaly.is>
- * @package       Anomaly\ImageFieldType\Command
  */
 class GetUploadFile
 {
@@ -34,7 +33,7 @@ class GetUploadFile
     /**
      * Handle the command.
      *
-     * @param Request $request
+     * @param  Request                                                   $request
      * @return array|\Symfony\Component\HttpFoundation\File\UploadedFile
      */
     public function handle(Request $request)

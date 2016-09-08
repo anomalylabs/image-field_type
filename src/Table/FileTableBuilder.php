@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Builder;
  * @link          http://anomaly.is/streams-platform
  * @author        AnomalyLabs, Inc. <hello@anomaly.is>
  * @author        Ryan Thompson <ryan@anomaly.is>
- * @package       Anomaly\ImageFieldType\Table
  */
 class FileTableBuilder extends TableBuilder
 {
@@ -57,7 +56,7 @@ class FileTableBuilder extends TableBuilder
             'value'       => [
                 'file'     => 'entry.name',
                 'folder'   => 'entry.folder.slug',
-                'keywords' => 'entry.keywords.labels',
+                'keywords' => 'entry.keywords.labels|join',
                 'disk'     => 'entry.folder.disk.slug',
                 'size'     => 'entry.size_label',
             ],
@@ -119,7 +118,7 @@ class FileTableBuilder extends TableBuilder
     /**
      * Set the folders.
      *
-     * @param array $folders
+     * @param  array $folders
      * @return $this
      */
     public function setFolders(array $folders = [])

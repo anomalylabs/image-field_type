@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Builder;
  * @link          http://anomaly.is/streams-platform
  * @author        AnomalyLabs, Inc. <hello@anomaly.is>
  * @author        Ryan Thompson <ryan@anomaly.is>
- * @package       Anomaly\ImageFieldType\Table
  */
 class ValueTableBuilder extends TableBuilder
 {
@@ -49,7 +48,7 @@ class ValueTableBuilder extends TableBuilder
             'value'       => [
                 'file'     => 'entry.name',
                 'folder'   => 'entry.folder.slug',
-                'keywords' => 'entry.keywords.labels',
+                'keywords' => 'entry.keywords.labels|join',
                 'disk'     => 'entry.folder.disk.slug',
                 'size'     => 'entry.size_label',
             ],
@@ -126,7 +125,7 @@ class ValueTableBuilder extends TableBuilder
     /**
      * Set the uploaded IDs.
      *
-     * @param array $uploaded
+     * @param  array $uploaded
      * @return $this
      */
     public function setUploaded(array $uploaded)
