@@ -10,6 +10,13 @@ use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use stdClass;
 
+/**
+ * Class ImageFieldType
+ *
+ * @link   http://pyrocms.com/
+ * @author PyroCMS, Inc. <support@pyrocms.com>
+ * @author Ryan Thompson <ryan@pyrocms.com>
+ */
 class ImageFieldType extends FieldType
 {
 
