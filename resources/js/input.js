@@ -1,75 +1,79 @@
-// Initialize file pickers
-$('[data-provides="anomaly.field_type.image"]').each(function () {
+$(document).on('ajaxComplete ready', function () {
 
-    var input = $(this);
-    var field = input.data('field_name');
-    var modal = $('#' + field + '-modal');
-    var wrapper = input.closest('.form-group');
-    var image = wrapper.find('[data-provides="cropper"]');
+    // Initialize file pickers
+    $('[data-provides="anomaly.field_type.image"]:not([data-initialized])').each(function () {
 
-    var options = {
-        viewMode: 0,
-        zoomable: false,
-        autoCropArea: 1,
-        data: image.data('data'),
-        aspectRatio: image.data('aspect-ratio'),
-        minContainerHeight: image.data('min-container-height'),
-        build: function () {
-            if (image.attr('src').length) {
-                image.closest('.cropper').removeClass('hidden');
+        $(this).attr('data-initialized', '');
+
+        var input = $(this);
+        var field = input.data('field_name');
+        var modal = $('#' + field + '-modal');
+        var wrapper = input.closest('.form-group');
+        var image = wrapper.find('[data-provides="cropper"]');
+
+        var options = {
+            viewMode: 0,
+            zoomable: false,
+            autoCropArea: 1,
+            data: image.data('data'),
+            aspectRatio: image.data('aspect-ratio'),
+            minContainerHeight: image.data('min-container-height'),
+            build: function () {
+                if (image.attr('src').length) {
+                    image.closest('.cropper').removeClass('hidden');
+                }
+            },
+            crop: function (e) {
+                $('[name="' + field + '[data]"]').val(JSON.stringify({
+                    'x': e.x,
+                    'y': e.y,
+                    'width': e.width,
+                    'height': e.height,
+                    'rotate': e.rotate,
+                    'scaleX': e.scaleX,
+                    'scaleY': e.scaleY
+                }));
             }
-        },
-        crop: function (e) {
-            $('[name="' + field + '[data]"]').val(JSON.stringify({
-                'x': e.x,
-                'y': e.y,
-                'width': e.width,
-                'height': e.height,
-                'rotate': e.rotate,
-                'scaleX': e.scaleX,
-                'scaleY': e.scaleY
-            }));
+        };
+
+        if (image.closest('.tab-content').length) {
+            options.minContainerWidth = image.closest('.tab-content').width();
         }
-    };
 
-    if (image.closest('.tab-content').length) {
-        options.minContainerWidth = image.closest('.tab-content').width();
-    }
+        image.cropper(options);
 
-    image.cropper(options);
+        modal.on('click', '[data-file]', function (e) {
 
-    modal.on('click', '[data-file]', function (e) {
+            e.preventDefault();
 
-        e.preventDefault();
+            modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
 
-        modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
+            wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $(this).data('file'), function () {
+                modal.modal('hide');
+            });
 
-        wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $(this).data('file'), function () {
+            image.closest('.cropper').removeClass('hidden');
 
-            modal.modal('hide');
+            image
+                .cropper('replace', '/streams/image-field_type/view/' + $(this).data('file'))
+                .cropper('reset');
+
+            $('[name="' + field + '[id]"]').val($(this).data('file'));
         });
 
-        image.closest('.cropper').removeClass('hidden');
+        $(wrapper).on('click', '[data-dismiss="file"]', function (e) {
 
-        image
-            .cropper('replace', '/streams/image-field_type/view/' + $(this).data('file'))
-            .cropper('reset');
+            e.preventDefault();
 
-        $('[name="' + field + '[id]"]').val($(this).data('file'));
-    });
+            $('[name="' + field + '[id]"]').val('');
+            $('[name="' + field + '[data]"]').val('');
 
-    $(wrapper).on('click', '[data-dismiss="file"]', function (e) {
+            wrapper.find('.selected').load('/streams/image-field_type/selected', function () {
 
-        e.preventDefault();
+                modal.modal('hide');
 
-        $('[name="' + field + '[id]"]').val('');
-        $('[name="' + field + '[data]"]').val('');
-
-        wrapper.find('.selected').load('/streams/image-field_type/selected', function () {
-
-            modal.modal('hide');
-
-            image.closest('.cropper').addClass('hidden');
+                image.closest('.cropper').addClass('hidden');
+            });
         });
     });
 });
