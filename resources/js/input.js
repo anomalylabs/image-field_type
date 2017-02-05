@@ -10,9 +10,7 @@ $(document).on('ajaxComplete ready', function () {
         var modal = $('#' + field + '-modal');
         var wrapper = input.closest('.form-group');
         var image = wrapper.find('[data-provides="cropper"]');
-
-        console.log(image.data('data'));
-
+        
         var options = {
             viewMode: 0,
             zoomable: false,
