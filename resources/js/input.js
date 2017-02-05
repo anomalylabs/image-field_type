@@ -10,7 +10,7 @@ $(document).on('ajaxComplete ready', function () {
         var modal = $('#' + field + '-modal');
         var wrapper = input.closest('.form-group');
         var image = wrapper.find('[data-provides="cropper"]');
-        
+
         var options = {
             viewMode: 0,
             zoomable: false,
@@ -24,6 +24,15 @@ $(document).on('ajaxComplete ready', function () {
                 }
             },
             crop: function (e) {
+
+                /**
+                 * This prevents trashy data from
+                 * being parsed into the field value.
+                 */
+                if (!isFinite(e.x) || isNaN(e.x) || typeof e.x == 'undefined' || e.x == null || (e.x == 0 && e.y == 0)) {
+                    return;
+                }
+                
                 $('[name="' + field + '[data]"]').val(JSON.stringify({
                     'x': e.x,
                     'y': e.y,
@@ -53,6 +62,12 @@ $(document).on('ajaxComplete ready', function () {
             modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
 
             wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $(this).data('file'), function () {
+                <<<<<<<
+                HEAD
+                === === =
+
+                >>>>>>>
+                1.1
                 modal.modal('hide');
             });
 
