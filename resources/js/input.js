@@ -11,6 +11,8 @@ $(document).on('ajaxComplete ready', function () {
         var wrapper = input.closest('.form-group');
         var image = wrapper.find('[data-provides="cropper"]');
 
+        console.log(image.data('data'));
+
         var options = {
             viewMode: 0,
             zoomable: false,
@@ -38,6 +40,10 @@ $(document).on('ajaxComplete ready', function () {
 
         if (image.closest('.tab-content').length) {
             options.minContainerWidth = image.closest('.tab-content').width();
+        }
+
+        if (image.closest('.grid-body').length) {
+            options.minContainerWidth = image.closest('.grid-body').width();
         }
 
         image.cropper(options);
