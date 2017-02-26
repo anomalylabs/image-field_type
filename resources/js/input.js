@@ -14,6 +14,7 @@ $(document).on('ajaxComplete ready', function () {
         var options = {
             viewMode: 0,
             zoomable: false,
+            responsive: false,
             autoCropArea: 1,
             data: image.data('data'),
             aspectRatio: image.data('aspect-ratio'),
@@ -51,6 +52,10 @@ $(document).on('ajaxComplete ready', function () {
 
         if (image.closest('.grid-body').length) {
             options.minContainerWidth = image.closest('.grid-body').width();
+        }
+
+        if (image.closest('.repeater-body').length) {
+            options.minContainerWidth = image.closest('.repeater-body').width();
         }
 
         image.cropper(options);
