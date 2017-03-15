@@ -1,97 +1,94 @@
 $(document).on('ajaxComplete ready', function () {
-
     // Initialize file pickers
-    $('[data-provides="anomaly.field_type.image"]:not([data-initialized])').each(function () {
+    $('[data-provides="anomaly.field_type.image"]:not([data-initialized])')
+        .each(function () {
+            var $this = $(this);
 
-        $(this).attr('data-initialized', '');
+            $this.attr('data-initialized', '');
 
-        var input = $(this);
-        var field = input.data('field_name');
-        var modal = $('#' + field + '-modal');
-        var wrapper = input.closest('.form-group');
-        var image = wrapper.find('[data-provides="cropper"]');
+            var field = $this.data('field_name');
+            var $modal = $('#' + field + '-modal');
+            var $wrapper = $this.closest('.form-group');
+            var $image = $wrapper.find('[data-provides="cropper"]');
 
-        var options = {
-            viewMode: 0,
-            zoomable: false,
-            responsive: false,
-            autoCropArea: 1,
-            data: image.data('data'),
-            aspectRatio: image.data('aspect-ratio'),
-            minContainerHeight: image.data('min-container-height'),
-            build: function () {
-                if (image.attr('src').length) {
-                    image.closest('.cropper').removeClass('hidden');
+            var options = {
+                viewMode: 0,
+                zoomable: false,
+                autoCropArea: 1,
+                data: $image.data('data'),
+                aspectRatio: $image.data('aspect-ratio'),
+                minContainerHeight: $image.data('min-container-height'),
+
+                build: function () {
+                    if ($image.attr('src').length) {
+                        $image.closest('.cropper').removeClass('hidden');
+                    }
+                },
+
+                crop: function (e) {
+                    $('[name="' + field + '[data]"]').val(JSON.stringify({
+                        x: e.x,
+                        y: e.y,
+                        width: e.width,
+                        height: e.height,
+                        rotate: e.rotate,
+                        scaleX: e.scaleX,
+                        scaleY: e.scaleY
+                    }));
                 }
-            },
-            crop: function (e) {
+            };
 
-                /**
-                 * This prevents trashy data from
-                 * being parsed into the field value.
-                 */
-                if (!isFinite(e.x) || isNaN(e.x) || typeof e.x == 'undefined' || e.x == null || (e.x == 0 && e.y == 0)) {
-                    return;
-                }
-
-                $('[name="' + field + '[data]"]').val(JSON.stringify({
-                    'x': e.x,
-                    'y': e.y,
-                    'width': e.width,
-                    'height': e.height,
-                    'rotate': e.rotate,
-                    'scaleX': e.scaleX,
-                    'scaleY': e.scaleY
-                }));
+            if ($image.closest('.tab-content').length) {
+                options.minContainerWidth = $image
+                    .closest('.tab-content')
+                    .width();
             }
-        };
 
-        if (image.closest('.tab-content').length) {
-            options.minContainerWidth = image.closest('.tab-content').width();
-        }
+            $image.cropper(options);
 
-        if (image.closest('.grid-body').length) {
-            options.minContainerWidth = image.closest('.grid-body').width();
-        }
+            $modal.on('click', '[data-file]', function (e) {
+                e.preventDefault();
 
-        if (image.closest('.repeater-body').length) {
-            options.minContainerWidth = image.closest('.repeater-body').width();
-        }
+                var $this = $(this);
 
-        image.cropper(options);
+                $modal.find('.modal-content')
+                    .append('<div class="modal-loading">' +
+                        '<div class="active loader"></div></div>');
 
-        modal.on('click', '[data-file]', function (e) {
+                $wrapper.find('.selected')
+                    .load(
+                        '/streams/image-field_type/selected?uploaded=' +
+                            $this.data('file'),
+                        function () {
+                            $modal.modal('hide');
+                        }
+                    );
 
-            e.preventDefault();
+                $image.closest('.cropper').removeClass('hidden');
 
-            modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
+                $image
+                    .cropper(
+                        'replace',
+                        '/streams/image-field_type/view/' + $this.data('file')
+                    )
+                    .cropper('reset');
 
-            wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $(this).data('file'), function () {
-                modal.modal('hide');
+                $('[name="' + field + '[id]"]').val($(this).data('file'));
             });
 
-            image.closest('.cropper').removeClass('hidden');
+            $wrapper.on('click', '[data-dismiss="file"]', function (e) {
+                e.preventDefault();
 
-            image
-                .cropper('replace', '/streams/image-field_type/view/' + $(this).data('file'))
-                .cropper('reset');
+                $('[name="' + field + '[id]"]').val('');
+                $('[name="' + field + '[data]"]').val('');
 
-            $('[name="' + field + '[id]"]').val($(this).data('file'));
-        });
-
-        $(wrapper).on('click', '[data-dismiss="file"]', function (e) {
-
-            e.preventDefault();
-
-            $('[name="' + field + '[id]"]').val('');
-            $('[name="' + field + '[data]"]').val('');
-
-            wrapper.find('.selected').load('/streams/image-field_type/selected', function () {
-
-                modal.modal('hide');
-
-                image.closest('.cropper').addClass('hidden');
+                $wrapper.find('.selected').load(
+                    '/streams/image-field_type/selected',
+                    function () {
+                        $modal.modal('hide');
+                        $image.closest('.cropper').addClass('hidden');
+                    }
+                );
             });
         });
-    });
 });
