@@ -12,8 +12,9 @@ $(document).on('ajaxComplete ready', function () {
         var image = wrapper.find('[data-provides="cropper"]');
 
         var options = {
-            viewMode: 0,
+            viewMode: 1,
             zoomable: false,
+            responsive: false,
             autoCropArea: 1,
             data: image.data('data'),
             aspectRatio: image.data('aspect-ratio'),
@@ -24,6 +25,15 @@ $(document).on('ajaxComplete ready', function () {
                 }
             },
             crop: function (e) {
+
+                /**
+                 * This prevents trashy data from
+                 * being parsed into the field value.
+                 */
+                if (!isFinite(e.x) || isNaN(e.x) || typeof e.x == 'undefined' || e.x == null || (e.x == 0 && e.y == 0)) {
+                    return;
+                }
+
                 $('[name="' + field + '[data]"]').val(JSON.stringify({
                     'x': e.x,
                     'y': e.y,
@@ -38,6 +48,14 @@ $(document).on('ajaxComplete ready', function () {
 
         if (image.closest('.tab-content').length) {
             options.minContainerWidth = image.closest('.tab-content').width();
+        }
+
+        if (image.closest('.grid-body').length) {
+            options.minContainerWidth = image.closest('.grid-body').width();
+        }
+
+        if (image.closest('.repeater-body').length) {
+            options.minContainerWidth = image.closest('.repeater-body').width();
         }
 
         image.cropper(options);
