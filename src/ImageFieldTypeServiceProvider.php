@@ -14,29 +14,6 @@ class ImageFieldTypeServiceProvider extends AddonServiceProvider
 {
 
     /**
-     * The addon listeners.
-     *
-     * @var array
-     */
-    protected $listeners = [
-        'Anomaly\Streams\Platform\Assignment\Event\AssignmentWasCreated' => [
-            'Anomaly\ImageFieldType\Listener\AddDataColumn',
-        ],
-        'Anomaly\Streams\Platform\Assignment\Event\AssignmentWasDeleted' => [
-            'Anomaly\ImageFieldType\Listener\DropDataColumn',
-        ],
-    ];
-
-    /**
-     * The singleton bindings.
-     *
-     * @var array
-     */
-    protected $singletons = [
-        'Anomaly\ImageFieldType\ImageFieldTypeModifier' => 'Anomaly\ImageFieldType\ImageFieldTypeModifier',
-    ];
-
-    /**
      * The addon routes.
      *
      * @var array
