@@ -43,6 +43,7 @@ class ImageFieldType extends FieldType
         'folders'      => [],
         'min_height'   => 400,
         'aspect_ratio' => null,
+        'mode'         => 'default',
     ];
 
     /**

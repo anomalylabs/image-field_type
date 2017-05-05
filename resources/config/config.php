@@ -23,4 +23,15 @@ return [
             'step'          => 50,
         ],
     ],
+    'mode'    => [
+        'required' => true,
+        'type'     => 'anomaly.field_type.select',
+        'config'   => [
+            'options' => [
+                'default' => 'anomaly.field_type.image::config.mode.option.default',
+                'select'  => 'anomaly.field_type.image::config.mode.option.select',
+                'upload'  => 'anomaly.field_type.image::config.mode.option.upload',
+            ],
+        ],
+    ],
 ];

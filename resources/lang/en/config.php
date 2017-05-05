@@ -14,4 +14,13 @@ return [
         'name'         => 'Minimum Height',
         'instructions' => 'Specify the minimum height of the crop area.',
     ],
+    'mode'         => [
+        'name'         => 'Input Mode',
+        'instructions' => 'How should users provide image input?',
+        'option'       => [
+            'default' => 'Upload and/or select images.',
+            'select'  => 'Select images only.',
+            'upload'  => 'Upload images only.',
+        ],
+    ],
 ];
