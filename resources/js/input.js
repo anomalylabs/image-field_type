@@ -14,8 +14,9 @@ $(document).on('ajaxComplete ready', function () {
         var options = {
             viewMode: 1,
             zoomable: false,
-            responsive: false,
             autoCropArea: 1,
+            responsive: false,
+            checkOrientation: false,
             data: image.data('data'),
             aspectRatio: image.data('aspect-ratio'),
             minContainerHeight: image.data('min-container-height'),
