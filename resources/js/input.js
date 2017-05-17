@@ -12,7 +12,7 @@ $(document).on('ajaxComplete ready', function () {
         var image = wrapper.find('[data-provides="cropper"]');
 
         var options = {
-            viewMode: 1,
+            viewMode: 2,
             zoomable: false,
             autoCropArea: 1,
             responsive: false,
