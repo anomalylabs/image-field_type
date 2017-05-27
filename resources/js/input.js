@@ -49,7 +49,7 @@ $(document).on('ajaxComplete ready', function () {
 
 
         if (image.closest('.field-group.image').length) {
-            options.minContainerWidth = image.closest('.card-block').width()-32;
+            options.minContainerWidth = image.closest('.card-block').width() - 32;
         }
 
         if (image.closest('.tab-content').length) {
@@ -57,15 +57,11 @@ $(document).on('ajaxComplete ready', function () {
         }
 
         if (image.closest('.grid-body').length) {
-            options.minContainerWidth = image.closest('.grid-item').width()-32;
+            options.minContainerWidth = image.closest('.grid-item').width() - 32;
         }
 
         if (image.closest('.repeater-body').length) {
-            if(image.closest('.repeater-item').width()===0) {
-               options.minContainerWidth = image.closest('.grid-item').width()-64;
-            } else {
-                options.minContainerWidth = image.closest('.repeater-item').width()-32;
-            }
+            options.minContainerWidth = image.closest('.repeater-item').width() - 32;
         }
 
 
