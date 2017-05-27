@@ -47,13 +47,12 @@ $(document).on('ajaxComplete ready', function () {
             }
         };
 
+        if (image.closest('.tab-content').length) {
+            options.minContainerWidth = image.closest('.tab-content').width();
+        }
 
         if (image.closest('.field-group.image').length) {
             options.minContainerWidth = image.closest('.card-block').width() - 32;
-        }
-
-        if (image.closest('.tab-content').length) {
-            options.minContainerWidth = image.closest('.tab-content').width();
         }
 
         if (image.closest('.grid-body').length) {
