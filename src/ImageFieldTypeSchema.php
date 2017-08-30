@@ -87,7 +87,7 @@ class ImageFieldTypeSchema extends FieldTypeSchema
          * then we need to remove.
          */
         if (!$assignment->isUnique() && !$assignment->isTranslatable() && $doctrine->hasIndex($unique)) {
-            $table->dropIndex(md5('unique_' . $this->fieldType->getColumnName()));
+            $table->dropIndex($unique);
         }
     }
 
