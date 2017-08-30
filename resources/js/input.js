@@ -31,7 +31,7 @@ $(document).on('ajaxComplete ready', function () {
                  * This prevents trashy data from
                  * being parsed into the field value.
                  */
-                if (!isFinite(e.x) || isNaN(e.x) || typeof e.x == 'undefined' || e.x == null || (e.x == 0 && e.y == 0)) {
+                if (!isFinite(e.x) || isNaN(e.x) || typeof e.x == 'undefined' || e.x == null) {
                     return;
                 }
 
