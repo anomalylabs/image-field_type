@@ -1,14 +1,12 @@
 <?php
 
-use Anomaly\FilesModule\Folder\Contract\FolderRepositoryInterface;
+use Anomaly\ImageFieldType\Support\Config\FoldersHandler;
 
 return [
     'folders'      => [
         'type'   => 'anomaly.field_type.checkboxes',
         'config' => [
-            'options' => function (FolderRepositoryInterface $folders) {
-                return $folders->all()->pluck('name', 'id')->all();
-            },
+            'handler' => FoldersHandler::class,
         ],
     ],
     'aspect_ratio' => [
@@ -23,7 +21,7 @@ return [
             'step'          => 50,
         ],
     ],
-    'mode'    => [
+    'mode'         => [
         'required' => true,
         'type'     => 'anomaly.field_type.select',
         'config'   => [
