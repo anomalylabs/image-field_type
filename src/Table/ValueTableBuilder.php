@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  * Class ValueTableBuilder
  *
- * @link          http://anomaly.is/streams-platform
- * @author        AnomalyLabs, Inc. <hello@anomaly.is>
- * @author        Ryan Thompson <ryan@anomaly.is>
+ * @link   http://pyrocms.com/
+ * @author PyroCMS, Inc. <support@pyrocms.com>
+ * @author Ryan Thompson <ryan@pyrocms.com>
  */
 class ValueTableBuilder extends TableBuilder
 {
@@ -67,7 +67,15 @@ class ValueTableBuilder extends TableBuilder
      * @var array
      */
     protected $buttons = [
+        'crop'   => [
+            'href'        => '#',
+            'data-toggle' => 'cropper',
+            'type'        => 'primary',
+            'icon'        => 'fa fa-crop',
+            'text'        => 'anomaly.field_type.image::button.crop',
+        ],
         'remove' => [
+            'href'         => '#',
             'data-dismiss' => 'file',
         ],
     ];

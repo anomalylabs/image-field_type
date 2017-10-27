@@ -12,15 +12,6 @@ return [
     'aspect_ratio' => [
         'type' => 'anomaly.field_type.text',
     ],
-    'min_height'   => [
-        'type'     => 'anomaly.field_type.integer',
-        'required' => true,
-        'config'   => [
-            'default_value' => 400,
-            'min'           => 200,
-            'step'          => 50,
-        ],
-    ],
     'mode'         => [
         'required' => true,
         'type'     => 'anomaly.field_type.select',

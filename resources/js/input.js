@@ -5,26 +5,23 @@ $(document).on('ajaxComplete ready', function () {
 
         $(this).attr('data-initialized', '');
 
-        var input = $(this);
-        var field = input.data('field_name');
-        var modal = $('#' + field + '-modal');
-        var wrapper = input.closest('.form-group');
-        var image = wrapper.find('[data-provides="cropper"]');
+        let input = $(this);
+        let field = input.data('field_name');
+        let modal = $('#' + field + '-modal');
+        let wrapper = input.closest('.form-group');
+        let image = wrapper.find('[data-provides="cropper"]');
+        let toggle = wrapper.find('[data-toggle="cropper"]');
 
-        var options = {
-            viewMode: 2,
+        let options = {
+            viewMode: 0,
+            autoCrop: true,
             zoomable: false,
             autoCropArea: 1,
-            responsive: false,
+            responsive: true,
             checkOrientation: false,
             data: image.data('data'),
             aspectRatio: image.data('aspect-ratio'),
             minContainerHeight: image.data('min-container-height'),
-            build: function () {
-                if (image.attr('src').length) {
-                    image.closest('.cropper').removeClass('hidden');
-                }
-            },
             crop: function (e) {
 
                 /**
@@ -47,24 +44,13 @@ $(document).on('ajaxComplete ready', function () {
             }
         };
 
-        if (image.closest('.tab-content').length) {
-            options.minContainerWidth = image.closest('.tab-content').width();
-        }
+        toggle.on('click', function () {
 
-        if (image.closest('.field-group.image').length) {
-            options.minContainerWidth = image.closest('.card-block').width() - 32;
-        }
+            image.closest('.cropper').removeClass('hidden');
+            image.cropper(options);
 
-        if (image.closest('.grid-body').length) {
-            options.minContainerWidth = image.closest('.grid-item').width() - 32;
-        }
-
-        if (image.closest('.repeater-body').length) {
-            options.minContainerWidth = image.closest('.repeater-item').width() - 32;
-        }
-
-
-        image.cropper(options);
+            return false;
+        });
 
         modal.on('click', '[data-file]', function (e) {
 
@@ -79,6 +65,7 @@ $(document).on('ajaxComplete ready', function () {
             image.closest('.cropper').removeClass('hidden');
 
             image
+                .cropper(options)
                 .cropper('replace', '/streams/image-field_type/view/' + $(this).data('file'))
                 .cropper('reset');
 
