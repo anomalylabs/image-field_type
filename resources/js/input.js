@@ -13,7 +13,7 @@
         let $modal = $('#' + $input.data('field_name') + '-modal');
 
         let options = {
-            viewMode: 0,
+            viewMode: 2,
             autoCrop: true,
             zoomable: false,
             autoCropArea: 1,
