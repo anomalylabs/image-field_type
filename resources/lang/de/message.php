@@ -7,6 +7,6 @@ return [
     'no_file_selected' => 'Keine Datei ausgewählt.',
     'no_uploads'       => 'Keine Dateien hochgeladen.',
     'overwrite'        => 'Wurde bereits hochgeladen. Wollen Sie die Datei überschreiben?',
-    'uploading'        => 'Lädt hoch',
-    'loading'          => 'Lädt',
+    'uploading'        => 'Wird hochgeladen',
+    'loading'          => 'Wird geladen',
 ];

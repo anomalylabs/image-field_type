@@ -8,11 +8,11 @@ return [
     ],
     'aspect_ratio' => [
         'name'         => 'Seitenverhältnis',
-        'instructions' => 'Geben Sie das Seitenverhältnis des Zuschneidungsbereichs an wie z.B. <strong>16:9</strong>, <strong>1:9</strong> or <strong>750:160</strong>.',
+        'instructions' => 'Geben Sie das Seitenverhältnis des Zuschnittsbereichs an wie z.B. <strong>16:9</strong>, <strong>1:9</strong> or <strong>750:160</strong>.',
     ],
     'min_height'   => [
         'name'         => 'Minimale Höhe',
-        'instructions' => 'Geben Sie die minimale Höhe des Zuschneidungsbereichs an.',
+        'instructions' => 'Geben Sie die minimale Höhe des Zuschnittsbereichs an.',
     ],
     'mode'         => [
         'name'         => 'Eingabe Modus',
