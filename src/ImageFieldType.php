@@ -123,7 +123,7 @@ class ImageFieldType extends FieldType
      */
     public function aspectRatio()
     {
-        return eval('return ' . strip_tags(str_replace(':', '/', $this->config('aspect_ratio'))) . ';');
+        return eval('return ' . strip_tags(str_replace([':', 'x'], '/', $this->config('aspect_ratio'))) . ';');
     }
 
     /**
