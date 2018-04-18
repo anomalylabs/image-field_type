@@ -74,6 +74,14 @@ class ValueTableBuilder extends TableBuilder
             'icon'        => 'fa fa-crop',
             'text'        => 'anomaly.field_type.image::button.crop',
         ],
+        'edit'   => [
+            'href'       => 'admin/files/edit/{entry.id}',
+            'permission' => 'anomaly.module.files::files.write',
+        ],
+        'view'   => [
+            'target' => '_blank',
+            'href'   => 'admin/files/view/{entry.id}',
+        ],
         'remove' => [
             'href'         => '#',
             'data-dismiss' => 'file',
