@@ -123,7 +123,13 @@ class ImageFieldType extends FieldType
      */
     public function aspectRatio()
     {
-        return eval('return ' . strip_tags(str_replace([':', 'x'], '/', $this->config('aspect_ratio'))) . ';');
+        list ($x, $y) = explode('/', strip_tags(str_replace([':', 'x'], '/', $this->config('aspect_ratio'))));
+
+        /**
+         * The cropper library want's it
+         * reversed like this for some reason.
+         */
+        return eval("return {$y}/{$x};");
     }
 
     /**
