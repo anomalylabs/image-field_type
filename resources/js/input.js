@@ -6,20 +6,27 @@
 
     fields.forEach(function (field) {
 
-        let container = field.parentElement.querySelector('.cropper__container');
-        let input = field.parentElement.querySelector('input[type="hidden"]');
-        let image = field.parentElement.querySelector('[data-provides="cropper"]');
-        let toggle = field.parentElement.querySelector('[data-toggle="cropper"]');
+        let name = field.getAttribute('data-field_name');
+
         let modal = field.parentElement.querySelector('.modal');
+        let container = field.parentElement.querySelector('.cropper__container');
+        let image = field.parentElement.querySelector('[data-provides="cropper"]');
+        let removeToggle = field.parentElement.querySelector('[data-dismiss="file"]');
+        let cropperToggle = field.parentElement.querySelector('[data-toggle="cropper"]');
+        let dataInput = field.parentElement.querySelector('input[name="' + name + '[data]"]');
+        let idInput = field.parentElement.querySelector('input[name="' + name + '[id]"]');
 
         let value = JSON.parse(image.getAttribute('data-data'));
 
         let options = {
-            left: value.x,
-            top : value.y,
-            width : value.width,
-            height : value.height,
+            startSize: [80, 80, '%'],
             aspectRatio: Number(image.getAttribute('data-aspect-ratio')),
+            onInitialize: function (instance) {
+                instance.box.x1 = value.x;
+                instance.box.y1 = value.y;
+                instance.box.x2 = value.x + value.width;
+                instance.box.y2 = value.y + value.height;
+            },
             onCropEnd: function (data) {
 
                 /**
@@ -30,7 +37,7 @@
                 //     return;
                 // }
 
-                input.value = JSON.stringify({
+                dataInput.value = JSON.stringify({
                     'x': data.x,
                     'y': data.y,
                     'width': data.width,
@@ -39,145 +46,53 @@
             }
         };
 
-        new Croppr(image, options);
-
-        toggle.addEventListener('click', function (event) {
+        cropperToggle.addEventListener('click', function (event) {
 
             event.preventDefault();
 
             container.classList.remove('hidden');
 
+            new Croppr(image, options);
+
             return false;
         });
 
-        modal.on('click', '[data-file]', function (e) {
+        removeToggle.addEventListener('click', function (event) {
 
-            e.preventDefault();
+            event.preventDefault();
 
-            let $button = $(this);
+            dataInput.value = '';
+            idInput.value = '';
 
-            $modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
+            modal.modal('hide');
 
-            $wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $button.data('file'), function () {
-                $modal.modal('hide');
-            });
+            container.classList.add('remove');
 
-            $image.closest('.cropper').removeClass('hidden');
-
-            $image
-                .cropper(options)
-                .cropper('replace', '/streams/image-field_type/view/' + $button.data('file'))
-                .cropper('reset');
-
-            $('[name="' + $input.data('field_name') + '[id]"]').val($button.data('file'));
+            return false;
         });
 
-        $wrapper.on('click', '[data-dismiss="file"]', function (e) {
+        document.addEventListener('click', function (event) {
+            if (event.target.hasAttribute('data-file')) {
 
-            e.preventDefault();
+                let $button = $(this);
 
-            $('[name="' + $input.data('field_name') + '[id]"]').val('');
-            $('[name="' + $input.data('field_name') + '[data]"]').val('');
+                $modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
 
-            $wrapper.find('.selected').load('/streams/image-field_type/selected', function () {
+                $wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $button.data('file'), function () {
+                    $modal.modal('hide');
+                });
 
-                $modal.modal('hide');
+                $image.closest('.cropper').removeClass('hidden');
 
                 $image
-                    .closest('.cropper')
-                    .addClass('hidden');
-            });
+                    .cropper(options)
+                    .cropper('replace', '/streams/image-field_type/view/' + $button.data('file'))
+                    .cropper('reset');
+
+                $('[name="' + $input.data('field_name') + '[id]"]').val($button.data('file'));
+            }
         });
 
     });
 
-    // Initialize file pickers
-    $(':not([data-initialized])').each(function () {
-
-        // let $wrapper = $input.closest('.form-group');
-        // let $image = $wrapper.find('[data-provides="cropper"]');
-        // let $toggle = $wrapper.find('[data-toggle="cropper"]');
-        // let $modal = $('#' + $input.data('field_name') + '-modal');
-
-        // let options = {
-        //     viewMode: 2,
-        //     autoCrop: true,
-        //     zoomable: false,
-        //     autoCropArea: 1,
-        //     responsive: true,
-        //     checkOrientation: false,
-        //     data: $image.data('data'),
-        //     aspectRatio: $image.data('aspect-ratio'),
-        //     crop: function (e) {
-        //
-        //         /**
-        //          * This prevents trashy data from
-        //          * being parsed into the field value.
-        //          */
-        //         if (!isFinite(e.x) || isNaN(e.x) || typeof e.x == 'undefined' || e.x == null) {
-        //             return;
-        //         }
-        //
-        //         $('[name="' + $input.data('field_name') + '[data]"]').val(JSON.stringify({
-        //             'x': e.x,
-        //             'y': e.y,
-        //             'width': e.width,
-        //             'height': e.height,
-        //             'rotate': e.rotate,
-        //             'scaleX': e.scaleX,
-        //             'scaleY': e.scaleY
-        //         }));
-        //     }
-        // };
-        //
-        // $toggle.on('click', function () {
-        //
-        //     $image
-        //         .closest('.cropper')
-        //         .removeClass('hidden');
-        //
-        //     $image.cropper(options);
-        //
-        //     return false;
-        // });
-        //
-        // $modal.on('click', '[data-file]', function (e) {
-        //
-        //     e.preventDefault();
-        //
-        //     let $button = $(this);
-        //
-        //     $modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
-        //
-        //     $wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $button.data('file'), function () {
-        //         $modal.modal('hide');
-        //     });
-        //
-        //     $image.closest('.cropper').removeClass('hidden');
-        //
-        //     $image
-        //         .cropper(options)
-        //         .cropper('replace', '/streams/image-field_type/view/' + $button.data('file'))
-        //         .cropper('reset');
-        //
-        //     $('[name="' + $input.data('field_name') + '[id]"]').val($button.data('file'));
-        // });
-        //
-        // $wrapper.on('click', '[data-dismiss="file"]', function (e) {
-        //
-        //     e.preventDefault();
-        //
-        //     $('[name="' + $input.data('field_name') + '[id]"]').val('');
-        //     $('[name="' + $input.data('field_name') + '[data]"]').val('');
-        //
-        //     $wrapper.find('.selected').load('/streams/image-field_type/selected', function () {
-        //
-        //         $modal.modal('hide');
-        //
-        //         $image
-        //             .closest('.cropper')
-        //             .addClass('hidden');
-        //     });
-        // });
-    });
 })(window, document);

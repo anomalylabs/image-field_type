@@ -13,7 +13,8 @@
        class="btn btn-success btn-xs">{{ trans('anomaly.field_type.image::button.upload') }}</a>
 {% endif %}
 
-<input type="hidden" name="{{ field_type.input_name }}[id]"
+<input type="hidden"
+       name="{{ field_type.input_name }}[id]"
        value="{{ field_type.value.id }}" {{ html_attributes(field_type.attributes) }} {{ field_type.disabled ? 'disabled' }} {{ field_type.readonly ? 'readonly' }}>
 
 <div class="selected">
@@ -28,7 +29,9 @@
 
 <div class="cropper__container hidden">
 
-    <input type="hidden" name="{{ field_type.input_name }}[data]"
+    <input type="hidden"
+           class="cropper__data-input"
+           name="{{ field_type.input_name }}[data]"
            value="{{ field_type.data|json_encode }}" {{ field_type.disabled ? 'disabled' }} {{ field_type.readonly ? 'readonly' }}>
 
     <img data-provides="cropper" data-data="{{ field_type.data|json_encode }}"
