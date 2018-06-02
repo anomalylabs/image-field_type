@@ -47,7 +47,7 @@
 
             $image
                 .closest('.cropper')
-                .removeClass('hidden');
+                .toggleClass('hidden');
 
             $image.cropper(options);
 
