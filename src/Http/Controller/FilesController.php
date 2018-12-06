@@ -90,4 +90,26 @@ class FilesController extends AdminController
     {
         return $output->make($files->find($id));
     }
+
+    /**
+     * Check if a file exists.
+     *
+     * @param FileRepositoryInterface $files
+     * @param                         $folder
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function exists(FileRepositoryInterface $files, $folder)
+    {
+        $success = true;
+        $exists  = false;
+
+        /* @var FolderInterface|null $folder */
+        $folder = $this->dispatch(new GetFolder($folder));
+
+        if ($folder && $file = $files->findByNameAndFolder($this->request->get('file'), $folder)) {
+            $exists = true;
+        }
+
+        return $this->response->json(compact('success', 'exists'));
+    }
 }

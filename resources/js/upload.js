@@ -26,7 +26,7 @@ $(function () {
                 formData.append('folder', element.data('folder'));
             },
             accept: function (file, done) {
-                $.getJSON('/admin/files/exists/' + element.data('folder') + '/' + file.name, function (data) {
+                $.post(REQUEST_ROOT_PATH + '/streams/image-field_type/exists/' + element.data('folder'), {'file': file.name}, function (data) {
                     if (data.exists) {
                         if (!confirm(file.name + " " + element.data('overwrite'))) {
                             dropzone.removeFile(file);
@@ -35,7 +35,7 @@ $(function () {
                     }
 
                     done();
-                });
+                }, 'json');
             },
             autoQueue: true,
             thumbnailWidth: 24,
