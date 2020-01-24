@@ -8,6 +8,7 @@ use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Crypt;
 use stdClass;
 
 /**
@@ -133,11 +134,7 @@ class ImageFieldType extends FieldType
      */
     public function configKey()
     {
-        $key = md5(json_encode($this->getConfig()));
-
-        $this->cache->put('image-field_type::' . $key, $this->getConfig(), 30);
-
-        return $key;
+        return Crypt::encrypt($this->getConfig());
     }
 
     /**
