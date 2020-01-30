@@ -10,6 +10,8 @@ use Anomaly\ImageFieldType\Table\ValueTableBuilder;
 use Anomaly\Streams\Platform\Http\Controller\AdminController;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Crypt;
 
 /**
  * Class FilesController
@@ -28,7 +30,7 @@ class FilesController extends AdminController
      * @param FileTableBuilder $table
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(FileTableBuilder $table)
+    public function index(FileTableBuilder $table, $key)
     {
         return $table->render();
     }
@@ -37,17 +39,19 @@ class FilesController extends AdminController
      * Return a list of folders to choose from.
      *
      * @param FolderRepositoryInterface $folders
-     * @param Repository                $cache
      * @param Request                   $request
-     * @return \Illuminate\View\View
+     * @param                           $key
+     *
+     * @return \Illuminate\Contracts\View\View|mixed
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function choose(FolderRepositoryInterface $folders, Repository $cache, Request $request)
+    public function choose(FolderRepositoryInterface $folders, Request $request, $key)
     {
         $allowed = [];
 
-        $config = $cache->get('image-field_type::' . $request->route('key'), []);
+        $config = Crypt::decrypt($key);
 
-        foreach (array_get($config, 'folders', []) as $identifier) {
+        foreach (Arr::get($config, 'folders', []) as $identifier) {
 
             /* @var FolderInterface $folder */
             if ($folder = $this->dispatch(new GetFolder($identifier))) {
