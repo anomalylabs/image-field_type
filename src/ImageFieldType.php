@@ -6,8 +6,9 @@ use Anomaly\ImageFieldType\Image\ImageModel;
 use Anomaly\ImageFieldType\Table\ValueTableBuilder;
 use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
-use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Crypt;
 use stdClass;
 
 /**
@@ -46,23 +47,6 @@ class ImageFieldType extends FieldType
     ];
 
     /**
-     * The cache repository.
-     *
-     * @var Repository
-     */
-    protected $cache;
-
-    /**
-     * Create a new FileFieldType instance.
-     *
-     * @param Repository $cache
-     */
-    public function __construct(Repository $cache)
-    {
-        $this->cache = $cache;
-    }
-
-    /**
      * Get the relation.
      *
      * @return BelongsTo
@@ -72,7 +56,7 @@ class ImageFieldType extends FieldType
         $entry = $this->getEntry();
 
         return $entry->belongsTo(
-            array_get($this->config, 'related', 'Anomaly\ImageFieldType\Image\ImageModel'),
+            Arr::get($this->config, 'related', 'Anomaly\ImageFieldType\Image\ImageModel'),
             $this->getColumnName()
         );
     }
@@ -91,7 +75,7 @@ class ImageFieldType extends FieldType
 
         $server = $file > $post ? $post : $file;
 
-        if (!$max = array_get($config, 'max')) {
+        if (!$max = Arr::get($config, 'max')) {
             $max = $server;
         }
 
@@ -99,9 +83,9 @@ class ImageFieldType extends FieldType
             $max = $server;
         }
 
-        array_set($config, 'max', $max);
+        Arr::set($config, 'max', $max);
 
-        array_set($config, 'folders', (array)$this->config('folders', []));
+        Arr::set($config, 'folders', (array)$this->config('folders', []));
 
         return $config;
     }
@@ -133,11 +117,8 @@ class ImageFieldType extends FieldType
      */
     public function configKey()
     {
-        $key = md5(json_encode($this->getConfig()));
+        return Crypt::encrypt($this->getConfig());
 
-        $this->cache->put('image-field_type::' . $key, $this->getConfig(), 30);
-
-        return $key;
     }
 
     /**
