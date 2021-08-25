@@ -1,17 +1,15 @@
 <?php namespace Anomaly\ImageFieldType\Http\Controller;
 
-use Anomaly\FilesModule\File\Contract\FileRepositoryInterface;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Anomaly\FilesModule\File\FileReader;
 use Anomaly\FilesModule\Folder\Command\GetFolder;
-use Anomaly\FilesModule\Folder\Contract\FolderInterface;
-use Anomaly\FilesModule\Folder\Contract\FolderRepositoryInterface;
 use Anomaly\ImageFieldType\Table\FileTableBuilder;
 use Anomaly\ImageFieldType\Table\ValueTableBuilder;
 use Anomaly\Streams\Platform\Http\Controller\AdminController;
-use Illuminate\Contracts\Cache\Repository;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Crypt;
+use Anomaly\FilesModule\File\Contract\FileRepositoryInterface;
+use Anomaly\FilesModule\Folder\Contract\FolderRepositoryInterface;
 
 /**
  * Class FilesController
@@ -49,7 +47,7 @@ class FilesController extends AdminController
     {
         $allowed = [];
 
-        $config = Crypt::decrypt($key);
+        $config = Cache::get($key);
 
         foreach (Arr::get($config, 'folders', []) as $identifier) {
 
