@@ -11,6 +11,8 @@
         let $image = $wrapper.find('[data-provides="cropper"]');
         let $toggle = $wrapper.find('[data-toggle="cropper"]');
         let $modal = $('#' + $input.data('field_name') + '-modal');
+        let $rotateLeft = $wrapper.find('[data-toggle="rotate-left"]');
+        let $rotateRight = $wrapper.find('[data-toggle="rotate-right"]');
 
         let options = {
             viewMode: 2,
@@ -52,6 +54,14 @@
             $image.cropper(options);
 
             return false;
+        });
+
+        $rotateLeft.on('click', function () {
+            $image.cropper('rotate', -45);
+        });
+
+        $rotateRight.on('click', function () {
+            $image.cropper('rotate', 45);
         });
 
         $modal.on('click', '[data-file]', function (e) {

@@ -15,6 +15,7 @@ class ImageFieldTypeAccessor extends FieldTypeAccessor
         'y',
         'width',
         'height',
+        'rotate',
     ];
 
     /**

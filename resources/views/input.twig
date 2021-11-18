@@ -1,4 +1,6 @@
 {{ asset_add("styles.css", "anomaly.field_type.image::scss/cropper.scss") }}
+{{ asset_add("styles.css", "anomaly.field_type.image::scss/input.css") }}
+
 {{ asset_add("scripts.js", "anomaly.field_type.image::js/cropper.min.js") }}
 {{ asset_add("scripts.js", "anomaly.field_type.image::js/input.js") }}
 
@@ -30,6 +32,11 @@
 
     <input type="hidden" name="{{ field_type.input_name }}[data]"
            value="{{ field_type.data|json_encode }}" {{ field_type.disabled ? 'disabled' }} {{ field_type.readonly ? 'readonly' }}>
+
+    <div class="btn-group cropper-controls">
+        <a href="#" class="btn btn-default" data-toggle="rotate-right"><i class="fa fa-rotate-right"></i></a>
+        <a href="#" class="btn btn-default" data-toggle="rotate-left"><i class="fa fa-rotate-left"></i></a>
+    </div>
 
     <img data-provides="cropper" data-data="{{ field_type.data|json_encode }}"
          data-aspect-ratio="{{ field_type.aspectRatio() }}"
