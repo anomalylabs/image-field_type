@@ -138,6 +138,10 @@ class ImageFieldType extends FieldType
         if ($file instanceof FileInterface) {
             $file = $file->getId();
         }
+        
+        if(is_array($file)) {
+            $file = $file['id'];
+        }
 
         return $table->setUploaded([$file])->build()->load()->getTableContent();
     }
