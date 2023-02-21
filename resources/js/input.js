@@ -7,10 +7,12 @@
 
         let $input = $(this);
 
+        let fieldName = $input.attr('name').replace('[id]', '');
+
         let $wrapper = $input.closest('.form-group');
         let $image = $wrapper.find('[data-provides="cropper"]');
         let $toggle = $wrapper.find('[data-toggle="cropper"]');
-        let $modal = $('#' + $input.data('field_name') + '-modal');
+        let $modal = $('#' + fieldName + '-modal');
         let $rotateLeft = $wrapper.find('[data-toggle="rotate-left"]');
         let $rotateRight = $wrapper.find('[data-toggle="rotate-right"]');
 
@@ -33,7 +35,9 @@
                     return;
                 }
 
-                $('[name="' + $input.data('field_name') + '[data]"]').val(JSON.stringify({
+                let fieldName = $input.attr('name').replace('[id]', '');
+
+                $('[name="' + fieldName + '[data]"]').val(JSON.stringify({
                     'x': e.x,
                     'y': e.y,
                     'width': e.width,
@@ -83,15 +87,19 @@
                 .cropper('replace', '/streams/image-field_type/view/' + $button.data('file'))
                 .cropper('reset');
 
-            $('[name="' + $input.data('field_name') + '[id]"]').val($button.data('file'));
+            let fieldName = $input.attr('name').replace('[id]', '');
+
+            $('[name="' + fieldName + '[id]"]').val($button.data('file'));
         });
 
         $wrapper.on('click', '[data-dismiss="file"]', function (e) {
 
             e.preventDefault();
 
-            $('[name="' + $input.data('field_name') + '[id]"]').val('');
-            $('[name="' + $input.data('field_name') + '[data]"]').val('');
+            let fieldName = $input.attr('name').replace('[id]', '');
+
+            $('[name="' + fieldName + '[id]"]').val('');
+            $('[name="' + fieldName + '[data]"]').val('');
 
             $wrapper.find('.selected').load('/streams/image-field_type/selected', function () {
 
