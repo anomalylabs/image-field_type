@@ -1,14 +1,14 @@
 <?php namespace Anomaly\ImageFieldType;
 
-use Anomaly\FilesModule\File\Contract\FileInterface;
-use Anomaly\ImageFieldType\Image\Contract\ImageInterface;
-use Anomaly\ImageFieldType\Image\ImageModel;
-use Anomaly\ImageFieldType\Table\ValueTableBuilder;
-use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
-use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
-use Illuminate\Contracts\Cache\Repository;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use stdClass;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
+use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
+use Anomaly\ImageFieldType\Table\ValueTableBuilder;
+use Anomaly\FilesModule\File\Contract\FileInterface;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
+use Anomaly\ImageFieldType\Image\Contract\ImageInterface;
 
 /**
  * Class ImageFieldType
@@ -41,27 +41,9 @@ class ImageFieldType extends FieldType
      */
     protected $config = [
         'folders'      => [],
-        'min_height'   => 400,
         'aspect_ratio' => null,
         'mode'         => 'default',
     ];
-
-    /**
-     * The cache repository.
-     *
-     * @var Repository
-     */
-    protected $cache;
-
-    /**
-     * Create a new FileFieldType instance.
-     *
-     * @param Repository $cache
-     */
-    public function __construct(Repository $cache)
-    {
-        $this->cache = $cache;
-    }
 
     /**
      * Get the relation.
@@ -73,7 +55,7 @@ class ImageFieldType extends FieldType
         $entry = $this->getEntry();
 
         return $entry->belongsTo(
-            array_get($this->config, 'related', 'Anomaly\ImageFieldType\Image\ImageModel'),
+            Arr::get($this->config, 'related', 'Anomaly\ImageFieldType\Image\ImageModel'),
             $this->getColumnName()
         );
     }
@@ -92,7 +74,7 @@ class ImageFieldType extends FieldType
 
         $server = $file > $post ? $post : $file;
 
-        if (!$max = array_get($config, 'max')) {
+        if (!$max = Arr::get($config, 'max')) {
             $max = $server;
         }
 
@@ -100,9 +82,9 @@ class ImageFieldType extends FieldType
             $max = $server;
         }
 
-        array_set($config, 'max', $max);
+        Arr::set($config, 'max', $max);
 
-        array_set($config, 'folders', (array)$this->config('folders', []));
+        Arr::set($config, 'folders', (array)$this->config('folders', []));
 
         return $config;
     }
@@ -125,7 +107,7 @@ class ImageFieldType extends FieldType
     public function aspectRatio()
     {
         try {
-            return eval('return ' . strip_tags(str_replace(':', '/', $this->config('aspect_ratio'))) . ';');
+            return eval('return ' . strip_tags(str_replace([':', 'x'], '/', $this->config('aspect_ratio'))) . ';');
         } catch (\Throwable $e) {
             return null;
         }
@@ -138,11 +120,12 @@ class ImageFieldType extends FieldType
      */
     public function configKey()
     {
-        $key = md5(json_encode($this->getConfig()));
+        Cache::remember($this->getInputName() . '-config', 60 * 60 * 24, function () {
+            return $this->getConfig();
+        });
 
-        $this->cache->put('image-field_type::' . $key, $this->getConfig(), 30);
+        return $this->getInputName() . '-config';
 
-        return $key;
     }
 
     /**
@@ -158,6 +141,10 @@ class ImageFieldType extends FieldType
 
         if ($file instanceof FileInterface) {
             $file = $file->getId();
+        }
+        
+        if(is_array($file)) {
+            $file = $file['id'];
         }
 
         return $table->setUploaded([$file])->build()->load()->getTableContent();
@@ -203,8 +190,8 @@ class ImageFieldType extends FieldType
     public function handle(FormBuilder $builder)
     {
         $entry = $builder->getFormEntry();
-        $id    = $builder->getPostValue($this->getField() . '.id');
-        $data  = $builder->getPostValue($this->getField() . '.data');
+        $id    = $builder->getPostValue($this->getInputName() . '.id');
+        $data  = $builder->getPostValue($this->getInputName() . '.data');
 
         // See the accessor for how IDs are handled.
         $entry->{$this->getField()} = $data;

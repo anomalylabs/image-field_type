@@ -37,6 +37,10 @@ class ImagePresenter extends FilePresenter
             return $image;
         }
 
+        if (isset($data->rotate) && $data->rotate !== 0) {
+            $image->rotate($data->rotate);
+        }
+
         return $image->crop($data->width, $data->height, $data->x, $data->y);
     }
 }

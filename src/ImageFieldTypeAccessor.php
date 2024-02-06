@@ -15,6 +15,7 @@ class ImageFieldTypeAccessor extends FieldTypeAccessor
         'y',
         'width',
         'height',
+        'rotate',
     ];
 
     /**
@@ -60,7 +61,9 @@ class ImageFieldTypeAccessor extends FieldTypeAccessor
         $data = [];
 
         foreach ($this->properties as $property) {
-            $data[$property] = (int)$value->{$property};
+            if (property_exists($value, $property)) {
+                $data[$property] = (int)$value->{$property};
+            }
         }
 
         return $data;

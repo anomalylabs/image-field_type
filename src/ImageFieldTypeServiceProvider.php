@@ -23,6 +23,7 @@ class ImageFieldTypeServiceProvider extends AddonServiceProvider
         'streams/image-field_type/choose/{key}'    => 'Anomaly\ImageFieldType\Http\Controller\FilesController@choose',
         'streams/image-field_type/selected'        => 'Anomaly\ImageFieldType\Http\Controller\FilesController@selected',
         'streams/image-field_type/view/{id}'       => 'Anomaly\ImageFieldType\Http\Controller\FilesController@view',
+        'streams/image-field_type/exists/{folder}' => 'Anomaly\ImageFieldType\Http\Controller\FilesController@exists',
         'streams/image-field_type/upload/{folder}' => 'Anomaly\ImageFieldType\Http\Controller\UploadController@index',
         'streams/image-field_type/handle'          => 'Anomaly\ImageFieldType\Http\Controller\UploadController@upload',
         'streams/image-field_type/recent'          => 'Anomaly\ImageFieldType\Http\Controller\UploadController@recent',

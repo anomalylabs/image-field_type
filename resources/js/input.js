@@ -1,30 +1,30 @@
-$(document).on('ajaxComplete ready', function () {
+(function (window, document) {
 
     // Initialize file pickers
     $('[data-provides="anomaly.field_type.image"]:not([data-initialized])').each(function () {
 
         $(this).attr('data-initialized', '');
 
-        var input = $(this);
-        var field = input.data('field_name');
-        var modal = $('#' + field + '-modal');
-        var wrapper = input.closest('.form-group');
-        var image = wrapper.find('[data-provides="cropper"]');
+        let $input = $(this);
 
-        var options = {
+        let fieldName = $input.attr('name').replace('[id]', '');
+
+        let $wrapper = $input.closest('.form-group');
+        let $image = $wrapper.find('[data-provides="cropper"]');
+        let $toggle = $wrapper.find('[data-toggle="cropper"]');
+        let $modal = $('#' + fieldName + '-modal');
+        let $rotateLeft = $wrapper.find('[data-toggle="rotate-left"]');
+        let $rotateRight = $wrapper.find('[data-toggle="rotate-right"]');
+
+        let options = {
             viewMode: 2,
+            autoCrop: true,
             zoomable: false,
             autoCropArea: 1,
-            responsive: false,
+            responsive: true,
             checkOrientation: false,
-            data: image.data('data'),
-            aspectRatio: image.data('aspect-ratio'),
-            minContainerHeight: image.data('min-container-height'),
-            build: function () {
-                if (image.attr('src').length) {
-                    image.closest('.cropper').removeClass('hidden');
-                }
-            },
+            data: $image.data('data'),
+            aspectRatio: $image.data('aspect-ratio'),
             crop: function (e) {
 
                 /**
@@ -35,7 +35,9 @@ $(document).on('ajaxComplete ready', function () {
                     return;
                 }
 
-                $('[name="' + field + '[data]"]').val(JSON.stringify({
+                let fieldName = $input.attr('name').replace('[id]', '');
+
+                $('[name="' + fieldName + '[data]"]').val(JSON.stringify({
                     'x': e.x,
                     'y': e.y,
                     'width': e.width,
@@ -47,57 +49,66 @@ $(document).on('ajaxComplete ready', function () {
             }
         };
 
-        if (image.closest('.tab-content').length) {
-            options.minContainerWidth = image.closest('.tab-content').width();
-        }
+        $toggle.on('click', function () {
 
-        if (image.closest('.field-group.image').length) {
-            options.minContainerWidth = image.closest('.card-block').width() - 32;
-        }
+            $image
+                .closest('.cropper')
+                .toggleClass('hidden');
 
-        if (image.closest('.grid-body').length) {
-            options.minContainerWidth = image.closest('.grid-item').width() - 32;
-        }
+            $image.cropper(options);
 
-        if (image.closest('.repeater-body').length) {
-            options.minContainerWidth = image.closest('.repeater-item').width() - 32;
-        }
-
-
-        image.cropper(options);
-
-        modal.on('click', '[data-file]', function (e) {
-
-            e.preventDefault();
-
-            modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
-
-            wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $(this).data('file'), function () {
-                modal.modal('hide');
-            });
-
-            image.closest('.cropper').removeClass('hidden');
-
-            image
-                .cropper('replace', '/streams/image-field_type/view/' + $(this).data('file'))
-                .cropper('reset');
-
-            $('[name="' + field + '[id]"]').val($(this).data('file'));
+            return false;
         });
 
-        $(wrapper).on('click', '[data-dismiss="file"]', function (e) {
+        $rotateLeft.on('click', function () {
+            $image.cropper('rotate', -45);
+        });
+
+        $rotateRight.on('click', function () {
+            $image.cropper('rotate', 45);
+        });
+
+        $modal.on('click', '[data-file]', function (e) {
 
             e.preventDefault();
 
-            $('[name="' + field + '[id]"]').val('');
-            $('[name="' + field + '[data]"]').val('');
+            let $button = $(this);
 
-            wrapper.find('.selected').load('/streams/image-field_type/selected', function () {
+            $modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
 
-                modal.modal('hide');
+            $wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $button.data('file'), function () {
+                $modal.modal('hide');
+            });
 
-                image.closest('.cropper').addClass('hidden');
+            $image.closest('.cropper').removeClass('hidden');
+
+            $image
+                .cropper(options)
+                .cropper('replace', '/streams/image-field_type/view/' + $button.data('file'))
+                .cropper('reset');
+
+            let fieldName = $input.attr('name').replace('[id]', '');
+
+            $('[name="' + fieldName + '[id]"]').val($button.data('file'));
+        });
+
+        $wrapper.on('click', '[data-dismiss="file"]', function (e) {
+
+            e.preventDefault();
+
+            let fieldName = $input.attr('name').replace('[id]', '');
+
+            $('[name="' + fieldName + '[id]"]').val('');
+            $('[name="' + fieldName + '[data]"]').val('');
+
+            $wrapper.find('.selected').load('/streams/image-field_type/selected', function () {
+
+                $modal.modal('hide');
+
+                $image
+                    .closest('.cropper')
+                    .addClass('hidden');
             });
         });
     });
-});
+})(window, document);

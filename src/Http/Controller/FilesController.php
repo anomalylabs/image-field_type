@@ -1,15 +1,15 @@
 <?php namespace Anomaly\ImageFieldType\Http\Controller;
 
-use Anomaly\FilesModule\File\Contract\FileRepositoryInterface;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Anomaly\FilesModule\File\FileReader;
 use Anomaly\FilesModule\Folder\Command\GetFolder;
-use Anomaly\FilesModule\Folder\Contract\FolderInterface;
-use Anomaly\FilesModule\Folder\Contract\FolderRepositoryInterface;
 use Anomaly\ImageFieldType\Table\FileTableBuilder;
 use Anomaly\ImageFieldType\Table\ValueTableBuilder;
 use Anomaly\Streams\Platform\Http\Controller\AdminController;
-use Illuminate\Contracts\Cache\Repository;
-use Illuminate\Http\Request;
+use Anomaly\FilesModule\File\Contract\FileRepositoryInterface;
+use Anomaly\FilesModule\Folder\Contract\FolderRepositoryInterface;
 
 /**
  * Class FilesController
@@ -28,7 +28,7 @@ class FilesController extends AdminController
      * @param FileTableBuilder $table
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index(FileTableBuilder $table)
+    public function index(FileTableBuilder $table, $key)
     {
         return $table->render();
     }
@@ -37,17 +37,19 @@ class FilesController extends AdminController
      * Return a list of folders to choose from.
      *
      * @param FolderRepositoryInterface $folders
-     * @param Repository                $cache
      * @param Request                   $request
-     * @return \Illuminate\View\View
+     * @param                           $key
+     *
+     * @return \Illuminate\Contracts\View\View|mixed
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function choose(FolderRepositoryInterface $folders, Repository $cache, Request $request)
+    public function choose(FolderRepositoryInterface $folders, Request $request, $key)
     {
         $allowed = [];
 
-        $config = $cache->get('image-field_type::' . $request->route('key'), []);
+        $config = Cache::get($key);
 
-        foreach (array_get($config, 'folders', []) as $identifier) {
+        foreach (Arr::get($config, 'folders', []) as $identifier) {
 
             /* @var FolderInterface $folder */
             if ($folder = $this->dispatch(new GetFolder($identifier))) {
@@ -89,5 +91,27 @@ class FilesController extends AdminController
     public function view(FileReader $output, FileRepositoryInterface $files, $id)
     {
         return $output->make($files->find($id));
+    }
+
+    /**
+     * Check if a file exists.
+     *
+     * @param FileRepositoryInterface $files
+     * @param                         $folder
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function exists(FileRepositoryInterface $files, $folder)
+    {
+        $success = true;
+        $exists  = false;
+
+        /* @var FolderInterface|null $folder */
+        $folder = $this->dispatch(new GetFolder($folder));
+
+        if ($folder && $file = $files->findByNameAndFolder($this->request->get('file'), $folder)) {
+            $exists = true;
+        }
+
+        return $this->response->json(compact('success', 'exists'));
     }
 }
