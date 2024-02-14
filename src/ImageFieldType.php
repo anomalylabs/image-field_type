@@ -190,8 +190,8 @@ class ImageFieldType extends FieldType
     public function handle(FormBuilder $builder)
     {
         $entry = $builder->getFormEntry();
-        $id    = $builder->getPostValue($this->getInputName() . '.id');
-        $data  = $builder->getPostValue($this->getInputName() . '.data');
+        $id    = data_get($builder->getPostData(), $this->getInputName() . '.id');
+        $data  = data_get($builder->getPostData(), $this->getInputName() . '.data');
 
         // See the accessor for how IDs are handled.
         $entry->{$this->getField()} = $data;
