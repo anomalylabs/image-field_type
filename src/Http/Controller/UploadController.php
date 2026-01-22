@@ -6,7 +6,6 @@ use Anomaly\FilesModule\Folder\Contract\FolderRepositoryInterface;
 use Anomaly\ImageFieldType\Table\FileTableBuilder;
 use Anomaly\ImageFieldType\Table\UploadTableBuilder;
 use Anomaly\Streams\Platform\Http\Controller\AdminController;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 
 /**
  * Class UploadController
@@ -18,9 +17,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
  */
 class UploadController extends AdminController
 {
-
-    use DispatchesJobs;
-
     /**
      * Return the uploader.
      *
@@ -33,7 +29,7 @@ class UploadController extends AdminController
         return $this->view->make(
             'anomaly.field_type.image::upload/index',
             [
-                'folder' => $this->dispatch(new GetFolder($folder)),
+                'folder' => dispatch_sync(new GetFolder($folder)),
                 'table'  => $table->make()->getTable(),
             ]
         );
