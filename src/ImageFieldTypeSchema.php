@@ -61,32 +61,18 @@ class ImageFieldTypeSchema extends FieldTypeSchema
         $table->integer($this->fieldType->getColumnName())->nullable($nullable)->change();
         $table->text($this->fieldType->getField() . '_data')->nullable(true)->change();
 
-        /**
-         * Mark the column unique if desired and not translatable.
-         * Otherwise, drop the unique index.
-         */
-        $connection = $this->schema->getConnection();
-        $manager    = $connection->getDoctrineSchemaManager();
-        $doctrine   = $manager->listTableDetails($connection->getTablePrefix() . $table->getTable());
-
         // The unique index name.
         $unique = md5('unique_' . $this->fieldType->getColumnName());
 
-        /**
-         * If the assignment is unique and not translatable
-         * and the table does not already have the given the
-         * given table index then go ahead and add it.
-         */
-        if ($assignment->isUnique() && !$assignment->isTranslatable() && !$doctrine->hasIndex($unique)) {
+        $hasIndex = $this->schema->hasIndex($table->getTable(), $unique);
+
+        // If unique and not translatable and the index is missing, add it.
+        if ($assignment->isUnique() && !$assignment->isTranslatable() && !$hasIndex) {
             $table->unique($this->fieldType->getColumnName(), $unique);
         }
 
-        /**
-         * If the assignment is NOT unique and not translatable
-         * and the table DOES have the given table index
-         * then we need to remove.
-         */
-        if (!$assignment->isUnique() && !$assignment->isTranslatable() && $doctrine->hasIndex($unique)) {
+        // If no longer unique and not translatable and the index exists, drop it.
+        if (!$assignment->isUnique() && !$assignment->isTranslatable() && $hasIndex) {
             $table->dropIndex($unique);
         }
     }
