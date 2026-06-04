@@ -30,8 +30,17 @@
                 /**
                  * This prevents trashy data from
                  * being parsed into the field value.
+                 *
+                 * A zero-size crop box (width/height of 0) is fired
+                 * by Cropper while a freshly replaced image is still
+                 * loading. Ignore it so we never persist an all-zero
+                 * crop; the real crop event fires once the image loads.
                  */
                 if (!isFinite(e.x) || isNaN(e.x) || typeof e.x == 'undefined' || e.x == null) {
+                    return;
+                }
+
+                if (!e.width || !e.height) {
                     return;
                 }
 

@@ -193,10 +193,72 @@ class ImageFieldType extends FieldType
         $id    = data_get($builder->getPostData(), $this->getInputName() . '.id');
         $data  = data_get($builder->getPostData(), $this->getInputName() . '.data');
 
+        // A frontend race can post an all-zero crop (width/height of 0)
+        // while a freshly uploaded image is still loading in the cropper.
+        // Treat a degenerate crop as "no usable crop" and fall back to a
+        // sensible default rather than persisting the broken value.
+        $data = $this->defaultCrop($data, $id);
+
         // See the accessor for how IDs are handled.
         $entry->{$this->getField()} = $data;
         $entry->{$this->getField()} = $id;
 
         $entry->save();
+    }
+
+    /**
+     * Replace a degenerate (zero-size) crop with a sensible default.
+     *
+     * When no aspect ratio is configured the full image is the correct
+     * default, so we store null and let the presenter render it uncropped.
+     * When an aspect ratio is configured we compute the largest centered
+     * crop matching that ratio (mirroring the cropper's autoCropArea: 1).
+     *
+     * @param  mixed $data The posted crop data (JSON string, array or object).
+     * @param  mixed $id   The posted file id.
+     * @return mixed
+     */
+    protected function defaultCrop($data, $id)
+    {
+        $decoded = is_string($data) ? json_decode($data) : $data;
+        $decoded = is_array($decoded) ? (object)$decoded : $decoded;
+
+        // A valid crop must have a positive width and height.
+        if (!is_object($decoded) || (!empty($decoded->width) && !empty($decoded->height))) {
+            return $data;
+        }
+
+        $ratio = $this->aspectRatio();
+
+        if (!$ratio || !$id) {
+            return null;
+        }
+
+        /* @var FileInterface $file */
+        $file = app('Anomaly\FilesModule\File\Contract\FileRepositoryInterface')->find($id);
+
+        $width  = $file ? $file->getWidth() : null;
+        $height = $file ? $file->getHeight() : null;
+
+        if (!$width || !$height) {
+            return null;
+        }
+
+        // Largest centered box matching the configured aspect ratio.
+        if ($width / $height > $ratio) {
+            $cropWidth  = (int)round($height * $ratio);
+            $cropHeight = $height;
+        } else {
+            $cropWidth  = $width;
+            $cropHeight = (int)round($width / $ratio);
+        }
+
+        return json_encode([
+            'x'      => (int)round(($width - $cropWidth) / 2),
+            'y'      => (int)round(($height - $cropHeight) / 2),
+            'width'  => $cropWidth,
+            'height' => $cropHeight,
+            'rotate' => 0,
+        ]);
     }
 }
