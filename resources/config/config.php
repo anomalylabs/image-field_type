@@ -10,7 +10,11 @@ return [
         ],
     ],
     'aspect_ratio' => [
-        'type' => 'anomaly.field_type.text',
+        'type'  => 'anomaly.field_type.text',
+        'rules' => [
+            'nullable',
+            'regex:/^\s*\d+(\.\d+)?\s*([:x\/]\s*\d+(\.\d+)?\s*)?$/',
+        ],
     ],
     'mode'         => [
         'required' => true,

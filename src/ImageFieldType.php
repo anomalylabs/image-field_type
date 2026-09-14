@@ -102,15 +102,24 @@ class ImageFieldType extends FieldType
     /**
      * Get the aspect ratio.
      *
-     * @return mixed
+     * @return null|int|float
      */
     public function aspectRatio()
     {
-        try {
-            return eval('return ' . strip_tags(str_replace([':', 'x'], '/', $this->config('aspect_ratio'))) . ';');
-        } catch (\Throwable $e) {
+        $ratio = $this->config('aspect_ratio');
+
+        if (!is_scalar($ratio)) {
             return null;
         }
+
+        $ratio = trim((string)$ratio);
+
+        // Ratios are written as "16:9", "4x3", "16/9" or as a plain number.
+        if (preg_match('#^(\d+(?:\.\d+)?)\s*[:x/]\s*(\d+(?:\.\d+)?)$#', $ratio, $matches)) {
+            return $matches[2] == 0 ? null : $matches[1] / $matches[2];
+        }
+
+        return is_numeric($ratio) ? $ratio + 0 : null;
     }
 
     /**
