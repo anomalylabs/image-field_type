@@ -1,6 +1,7 @@
 <?php namespace Anomaly\ImageFieldType\Http\Controller;
 
 use Illuminate\Support\Facades\Cache;
+use Anomaly\FilesModule\File\FileSanitizer;
 use Anomaly\FilesModule\File\FileUploader;
 use Anomaly\FilesModule\Folder\Command\GetFolder;
 use Anomaly\FilesModule\Folder\Contract\FolderRepositoryInterface;
@@ -83,6 +84,17 @@ class UploadController extends AdminController
             return $this->response->json(['message' => 'That folder is not allowed for this field.'], 403);
         }
 
+        /*
+         * The uploader validates against the folder, which may
+         * accept things that are not images. An image field
+         * takes images.
+         */
+        $images = array_map('strtolower', (array)config('anomaly.module.files::mimes.types.image', []));
+
+        if (!in_array($this->extension($file), $images, true)) {
+            return $this->response->json(['message' => 'That file is not an image.'], 422);
+        }
+
         try {
             $entry = $uploader->upload($file, $folder);
         } catch (\Exception $e) {
@@ -109,6 +121,23 @@ class UploadController extends AdminController
             ->setUploaded(explode(',', $this->request->get('uploaded')))
             ->make()
             ->getTableContent();
+    }
+
+
+    /**
+     * Return the extension the uploader will store the file under.
+     *
+     * Derived through FileSanitizer so this and FileUploader agree
+     * on a name like "x.png.pdf".
+     *
+     * @param  UploadedFile $file
+     * @return string
+     */
+    protected function extension($file)
+    {
+        return strtolower(
+            pathinfo(FileSanitizer::clean($file->getClientOriginalName()), PATHINFO_EXTENSION)
+        );
     }
 
     /**
