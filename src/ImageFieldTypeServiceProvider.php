@@ -19,14 +19,38 @@ class ImageFieldTypeServiceProvider extends AddonServiceProvider
      * @var array
      */
     protected $routes = [
-        'streams/image-field_type/index/{key}'     => 'Anomaly\ImageFieldType\Http\Controller\FilesController@index',
-        'streams/image-field_type/choose/{key}'    => 'Anomaly\ImageFieldType\Http\Controller\FilesController@choose',
-        'streams/image-field_type/selected'        => 'Anomaly\ImageFieldType\Http\Controller\FilesController@selected',
-        'streams/image-field_type/view/{id}'       => 'Anomaly\ImageFieldType\Http\Controller\FilesController@view',
-        'streams/image-field_type/exists/{folder}' => 'Anomaly\ImageFieldType\Http\Controller\FilesController@exists',
-        'streams/image-field_type/upload/{folder}' => 'Anomaly\ImageFieldType\Http\Controller\UploadController@index',
-        'streams/image-field_type/handle'          => 'Anomaly\ImageFieldType\Http\Controller\UploadController@upload',
-        'streams/image-field_type/recent'          => 'Anomaly\ImageFieldType\Http\Controller\UploadController@recent',
+        'admin/image-field_type/index/{key}'            => [
+            'verb' => 'get',
+            'uses' => 'Anomaly\ImageFieldType\Http\Controller\\FilesController@index',
+        ],
+        'admin/image-field_type/choose/{key}'           => [
+            'verb' => 'get',
+            'uses' => 'Anomaly\ImageFieldType\Http\Controller\\FilesController@choose',
+        ],
+        'admin/image-field_type/selected/{key}'         => [
+            'verb' => 'get',
+            'uses' => 'Anomaly\ImageFieldType\Http\Controller\\FilesController@selected',
+        ],
+        'admin/image-field_type/view/{id}/{key}'        => [
+            'verb' => 'get',
+            'uses' => 'Anomaly\ImageFieldType\Http\Controller\\FilesController@view',
+        ],
+        'admin/image-field_type/exists/{folder}/{key}'  => [
+            'verb' => 'post',
+            'uses' => 'Anomaly\ImageFieldType\Http\Controller\\FilesController@exists',
+        ],
+        'admin/image-field_type/upload/{folder}/{key}'  => [
+            'verb' => 'get',
+            'uses' => 'Anomaly\ImageFieldType\Http\Controller\\UploadController@index',
+        ],
+        'admin/image-field_type/handle/{key}'           => [
+            'verb' => 'post',
+            'uses' => 'Anomaly\ImageFieldType\Http\Controller\\UploadController@upload',
+        ],
+        'admin/image-field_type/recent/{key}'           => [
+            'verb' => 'get',
+            'uses' => 'Anomaly\ImageFieldType\Http\Controller\\UploadController@recent',
+        ],
     ];
 
 }

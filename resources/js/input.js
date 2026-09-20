@@ -6,6 +6,7 @@
         $(this).attr('data-initialized', '');
 
         let $input = $(this);
+        let key = $input.data('config_key');
 
         let fieldName = $input.attr('name').replace('[id]', '');
 
@@ -85,7 +86,7 @@
 
             $modal.find('.modal-content').append('<div class="modal-loading"><div class="active loader"></div></div>');
 
-            $wrapper.find('.selected').load('/streams/image-field_type/selected?uploaded=' + $button.data('file'), function () {
+            $wrapper.find('.selected').load('/admin/image-field_type/selected/' + key + '?uploaded=' + $button.data('file'), function () {
                 $modal.modal('hide');
             });
 
@@ -93,7 +94,7 @@
 
             $image
                 .cropper(options)
-                .cropper('replace', '/streams/image-field_type/view/' + $button.data('file'))
+                .cropper('replace', '/admin/image-field_type/view/' + $button.data('file') + '/' + key)
                 .cropper('reset');
 
             let fieldName = $input.attr('name').replace('[id]', '');
@@ -110,7 +111,7 @@
             $('[name="' + fieldName + '[id]"]').val('');
             $('[name="' + fieldName + '[data]"]').val('');
 
-            $wrapper.find('.selected').load('/streams/image-field_type/selected', function () {
+            $wrapper.find('.selected').load('/admin/image-field_type/selected/' + key, function () {
 
                 $modal.modal('hide');
 

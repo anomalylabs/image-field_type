@@ -6,17 +6,17 @@
 
 {% if field_type.config.mode in ['default', 'select'] %}
     <a data-toggle="modal" data-target="#{{ field_type.input_name }}-modal" class="btn btn-info btn-xs"
-       href="{{ url('streams/image-field_type/index/' ~ field_type.config_key) }}">{{ trans('anomaly.field_type.image::button.select_image') }}</a>
+       href="{{ url('admin/image-field_type/index/' ~ field_type.config_key) }}">{{ trans('anomaly.field_type.image::button.select_image') }}</a>
 {% endif %}
 
-{% if field_type.config.mode in ['default', 'upload'] %}
+{% if field_type.config.mode in ['default', 'upload'] and user().hasPermission('anomaly.module.files::files.write') %}
     <a data-toggle="modal"
-       data-target="#{{ field_type.input_name }}-modal" {% if field_type.config.folders|length == 1 %} href="{{ url('streams/image-field_type/upload/' ~ field_type.config.folders|first) }}" {% else %} href="{{ url('streams/image-field_type/choose/' ~ field_type.config_key) }}" {% endif %}
+       data-target="#{{ field_type.input_name }}-modal" {% if field_type.config.folders|length == 1 %} href="{{ url('admin/image-field_type/upload/' ~ field_type.config.folders|first ~ '/' ~ field_type.config_key) }}" {% else %} href="{{ url('admin/image-field_type/choose/' ~ field_type.config_key) }}" {% endif %}
        class="btn btn-success btn-xs">{{ trans('anomaly.field_type.image::button.upload') }}</a>
 {% endif %}
 
 <input type="hidden" name="{{ field_type.input_name }}[id]"
-       value="{{ field_type.value.id }}" {{ html_attributes(field_type.attributes) }} {{ field_type.disabled ? 'disabled' }} {{ field_type.readonly ? 'readonly' }}>
+       value="{{ field_type.value.id }}" data-config_key="{{ field_type.config_key }}" {{ html_attributes(field_type.attributes) }} {{ field_type.disabled ? 'disabled' }} {{ field_type.readonly ? 'readonly' }}>
 
 <div class="selected">
     {{ field_type.value_table|raw }}
@@ -40,6 +40,6 @@
 
     <img data-provides="cropper" data-data="{{ field_type.data|json_encode }}"
          data-aspect-ratio="{{ field_type.aspectRatio() }}"
-         {% if field_type.value.id %} src="{{ url('streams/image-field_type/view/' ~ field_type.value.id) }}" {% endif %}>
+         {% if field_type.value.id %} src="{{ url('admin/image-field_type/view/' ~ field_type.value.id ~ '/' ~ field_type.config_key) }}" {% endif %}>
 
 </div>

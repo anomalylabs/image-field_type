@@ -7,6 +7,7 @@ $(function () {
 
     var uploader = $('#upload');
     var element = $('.dropzone');
+    var key = element.data('key');
     var template = uploader.find('.template');
     var preview = template.html();
 
@@ -15,7 +16,7 @@ $(function () {
     var dropzone = new Dropzone('.dropzone:not(data-initialized)',
         {
             paramName: 'upload',
-            url: '/streams/image-field_type/handle',
+            url: '/admin/image-field_type/handle/' + key,
             headers: {
                 'X-CSRF-TOKEN': CSRF_TOKEN
             },
@@ -26,7 +27,7 @@ $(function () {
                 formData.append('folder', element.data('folder'));
             },
             accept: function (file, done) {
-                $.post(REQUEST_ROOT_PATH + '/streams/image-field_type/exists/' + element.data('folder'), {'file': file.name}, function (data) {
+                $.post(REQUEST_ROOT_PATH + '/admin/image-field_type/exists/' + element.data('folder') + '/' + key, {'file': file.name}, function (data) {
                     if (data.exists) {
                         if (!confirm(file.name + " " + element.data('overwrite'))) {
                             dropzone.removeFile(file);
@@ -85,6 +86,6 @@ $(function () {
 
         uploader.find('.uploaded .modal-body').html(element.data('loading') + '...');
 
-        uploader.find('.uploaded').load('/streams/image-field_type/recent?uploaded=' + uploaded.join(','));
+        uploader.find('.uploaded').load('/admin/image-field_type/recent/' + key + '?uploaded=' + uploaded.join(','));
     });
 });
