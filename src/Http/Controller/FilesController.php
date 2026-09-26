@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use Anomaly\ImageFieldType\Support\ConfigCache;
 use Anomaly\FilesModule\File\FileReader;
 use Anomaly\FilesModule\Folder\Command\GetFolder;
 use Anomaly\ImageFieldType\Support\AllowedFolders;
@@ -193,7 +193,7 @@ class FilesController extends AdminController
      */
     protected function config($key)
     {
-        if (!$config = Cache::get($key)) {
+        if (!$config = ConfigCache::get($key)) {
             abort(404);
         }
 

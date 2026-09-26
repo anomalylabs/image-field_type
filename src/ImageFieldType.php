@@ -1,8 +1,8 @@
 <?php namespace Anomaly\ImageFieldType;
 
 use stdClass;
+use Anomaly\ImageFieldType\Support\ConfigCache;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Cache;
 use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Anomaly\ImageFieldType\Table\ValueTableBuilder;
 use Anomaly\FilesModule\File\Contract\FileInterface;
@@ -129,12 +129,7 @@ class ImageFieldType extends FieldType
      */
     public function configKey()
     {
-        Cache::remember($this->getInputName() . '-config', 60 * 60 * 24, function () {
-            return $this->getConfig();
-        });
-
-        return $this->getInputName() . '-config';
-
+        return ConfigCache::put($this->getConfig());
     }
 
     /**
